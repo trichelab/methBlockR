@@ -1,6 +1,6 @@
 Package: methBlockR
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: massage methylation loci into regulatory blocks and back
+Version: 0.9.1
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
