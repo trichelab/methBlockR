@@ -1,12 +1,25 @@
 Package: methBlockR
 Title: massage methylation loci into regulatory blocks and back
-Version: 0.9.1
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Version: 0.9.2
+Authors@R: person("Tim","Triche", 
+                  email = "tim.triche@gmail.com", 
+                  role = c("aut","cre"),
+                  comment = c(ORCID = "0000-0001-5665-946X"))
+Description: Methylation blocks are a convenient abstraction for 'loci where 
+             DNA methylation changes concordantly between conditions or states'
+             proposed by Loyfer (Nature, 2023). Said blocks are also a simple 
+             mechanism to exchange data back and forth between deep (array) 
+             and wide (sequencing based) assays, thereby leveraging the huge 
+             number of samples already profiled on the former to speed adoption 
+             of the latter. The functions provided ease movement between blocks
+             and loci. Note that 'fromMethBlocks' only expands the dimension
+             of a methBlocked dataset to match that of a locus-level dataset; 
+             without an underlying model such as NMF or a VAE, it is not trivial
+             to provide anything more than an estimation of block-level
+             methylation rates at each locus. That said, it sometimes is the 
+             case that low-coverage or poorly-targeted loci end up better 
+             approximated by a block-wise methylation rate than by local ratio.
+License: MIT
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

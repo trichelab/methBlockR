@@ -2,7 +2,9 @@
 
 export(asMethBlocks)
 export(assignBlocks)
+export(fromMethBlocks)
 export(switchMethBlocksGenome)
 export(toMethBlocks)
 import(BiocParallel)
 import(GenomicRanges)
+import(SummarizedExperiment)
