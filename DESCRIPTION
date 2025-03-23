@@ -1,6 +1,6 @@
 Package: methBlockR
 Title: massage methylation loci into regulatory blocks and back
-Version: 0.9.5
+Version: 0.9.6
 Authors@R: person("Tim","Triche", 
                   email = "tim.triche@gmail.com", 
                   role = c("aut","cre"),
