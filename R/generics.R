@@ -46,18 +46,6 @@ setMethod("preprocessMethod", "SummarizedExperiment",
           function(object) metadata(object)$preprocessMethod)
 
 
-# preprocessMethod<-
-if (!isGeneric("preprocessMethod<-")) {
-  setGeneric("preprocessMethod<-", 
-             function(object, ..., value) standardGeneric("preprocessMethod<-"))
-}
-setReplaceMethod("preprocessMethod", 
-                 c(object="SummarizedExperiment", value="ANY"),
-                 function(object, ..., value) {
-                   metadata(object)$preprocessMethod <- value
-                   return(object)
-                 })
-
 
 # helper fns
 .M2B <- function(x) (2 ** x) / (1 + (2 ** x))
