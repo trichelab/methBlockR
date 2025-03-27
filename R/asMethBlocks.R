@@ -13,7 +13,8 @@
 #' 
 #' @details
 #' If you have specified a genome() for x, which you very much should, this 
-#' function will raise an error if the genomes or seqlevels do not match.
+#' function will raise an error if the genomes or seqlevels do not match. A copy
+#' of the subset of methBlocks used for mapping will be returned in metadata(x).
 #' 
 #' @seealso         switchMethBlocksGenome
 #' 
@@ -78,7 +79,9 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
   rownames(amb) <- rownames(blockBetas)
   assay(amb, "Beta") <- blockBetas
   rowRanges(amb) <- mbgr
-  
+
+  message("Putting block mappings into metadata...")
+
   message("Done.")
   return(amb)
 

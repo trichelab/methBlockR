@@ -25,7 +25,8 @@ version of asMethBlocks supports "custom" as a target; be careful with that.
 }
 \details{
 If you have specified a genome() for x, which you very much should, this
-function will raise an error if the genomes or seqlevels do not match.
+function will raise an error if the genomes or seqlevels do not match. A copy
+of the subset of methBlocks used for mapping will be returned in metadata(x).
 }
 \seealso{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{    switchMethBlocksGenome
