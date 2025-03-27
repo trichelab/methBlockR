@@ -4,8 +4,6 @@ if (!isGeneric("getGreen")) {
              function(object) standardGeneric("getGreen"))
 }
 
-#' @export
-#'
 setMethod("getGreen", "SummarizedExperiment", 
           function(object) assay(object, "Green"))
 
@@ -16,8 +14,6 @@ if (!isGeneric("getRed")) {
              function(object) standardGeneric("getRed"))
 }
 
-#' @export
-#'
 setMethod("getRed", "SummarizedExperiment", 
           function(object) assay(object, "Red"))
 
@@ -55,8 +51,6 @@ if (!isGeneric("preprocessMethod")) {
              function(object) standardGeneric("preprocessMethod"))
 }
 
-#' @export
-#
 setMethod("preprocessMethod", "SummarizedExperiment", 
           function(object) metadata(object)$preprocessMethod)
 
@@ -71,8 +65,6 @@ if (!isGeneric("getBeta")) {
              function(object, ...) standardGeneric("getBeta"))
 }
 
-#' @export
-#
 setMethod("getBeta", "SummarizedExperiment", 
           function(object, ...) {
             if ("Beta" %in% assayNames(object)) assay(object, "Beta")
@@ -85,8 +77,6 @@ if (!isGeneric("getM")) {
              function(object, ...) standardGeneric("getM"))
 }
 
-#' @export
-#
 setMethod("getM", "SummarizedExperiment", 
           function(object, ...) {
             if ("M" %in% assayNames(object)) assay(object, "M")
@@ -99,14 +89,8 @@ if (!isGeneric("getCN")) {
   setGeneric("getCN", 
              function(object, ...) standardGeneric("getCN"))
 }
-
-#' @export
-#
 setMethod("getCN", "SummarizedExperiment", 
           function(object, ...) assay(object, "CN"))
-
-#' @export
-#
 setMethod("getCN", "MethylationExperiment", 
           function(object, ...) object@CN)
 
@@ -115,9 +99,6 @@ if (!isGeneric("getMeth")) {
   setGeneric("getMeth", 
              function(object) standardGeneric("getMeth"))
 }
-
-#' @export
-#
 setMethod("getMeth", "SummarizedExperiment", 
           function(object) getBeta(object) * (2 ** getCN(object)))
 
@@ -126,9 +107,6 @@ if (!isGeneric("getUnmeth")) {
   setGeneric("getUnmeth",
              function(object) standardGeneric("getUnmeth"))
 }
-
-#' @export
-#
 setMethod("getUnmeth", "SummarizedExperiment", 
           function(object) (1 - getBeta(object)) * (2 ** getCN(object)))
 
@@ -140,7 +118,6 @@ if (!isGeneric("missingness")) {
   setGeneric("missingness", 
              function(X, MARGIN, i, ...) standardGeneric("missingness"))
 }
-
 #' @export
 #'
 setMethod("missingness", c(X="ANY", MARGIN="missing", i="missing"),
@@ -195,22 +172,6 @@ setMethod("missingness", c("matrix", "numeric", "num_or_char"),
   })
 
 
-if (!isGeneric("getBlocks")) {
-  setGeneric("getBlocks", 
-             function(object, ...) standardGeneric("getBlocks"))
-}
-
-#' @export
-#'
-setMethod("getBlocks", "MethylationExperiment", 
-          function(object, ...) metadata(object)$blocks)
-
-#' @export
-#'
-setMethod("getBlocks", "MethBlockExperiment", 
-          function(object, ...) object@blocks)
-
-
 if (!isGeneric("getSNPs")) {
   setGeneric("getSNPs", 
              function(object, ...) standardGeneric("getSNPs"))
@@ -220,8 +181,3 @@ if (!isGeneric("getSNPs")) {
 #'
 setMethod("getSNPs", "MethylationExperiment", 
           function(object, ...) object@SNPs)
-
-#' @export
-#'
-setMethod("getBlocks", "MethBlockExperiment", 
-          function(object, ...) object@blocks)
