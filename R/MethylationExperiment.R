@@ -84,7 +84,7 @@ openSesameToME <- function(IDATs, BPPARAM=NULL, intensities=TRUE, cd=NULL, ...){
 
   # if requested, CN
   if (intensities) {
-    message("Processing intensities for copynumber analysis...")
+    message("Processing intensities for copy number analysis...")
     CN <- openSesame(IDATs, func=totalIntensities, BPPARAM=BPPARAM)
     MethylationExperiment(assays=list(Beta=betas, CN=CN), SNPs=SNPs, colData=cd)
   } else { 
