@@ -64,7 +64,7 @@ openSesameToME <- function(IDATs, BPPARAM=NULL, intensities=TRUE, cd=NULL, ...){
   message("Processing beta values...")
   asys <- list(Beta=openSesame(sdfs, ..., BPPARAM=BPPARAM, func=getBetas))
   rd <- data.frame(row.names=rownames(asys[["Beta"]]))
-  rd$type <- c(cg="CpG", ch="CpH", rs="SNP")[substr(rownames(rd, 1, 2))]
+  rd$type <- c(cg="CpG", ch="CpH", rs="SNP")[substr(rownames(rd), 1, 2)]
 
   # if requested, CN
   if (intensities) {
@@ -72,17 +72,11 @@ openSesameToME <- function(IDATs, BPPARAM=NULL, intensities=TRUE, cd=NULL, ...){
     asys[["CN"]] <- openSesame(sdfs, func=totalIntensities, BPPARAM=BPPARAM)
   } 
 
-  # skeletal colData and a backup for rowname mismatches: 
-  cd0 <- DataFrame(path=IDATs, row.names=colnames(betas))
-  if (!is.null(cd)) {
-    if (!identical(colnames(betas), rownames(cd))) { 
-      message("rownames(cd) != basename(IDATs). Discarding. Fix manually.")
-      cd <- cd0
-    }
-  } else cd <- cd0
-
-  ME <- MethylationExperiment(assays=asys, rowData=rd, colData=cd)
-  metadata(ME)[["SNPs"]] <- x[grep("^rs", rownames(x)), ] # to MBE
-  splitAltExps(ME, rowData(ME)$type, ref="CpG")
+  # construct the object & partition with splitAltExps
+  ME <- MethylationExperiment(assays=asys, rowData=rd)
+  ME <- splitAltExps(ME, rowData(ME)$type, ref="CpG")
+  colnames(ME) <- basename(IDATs) # yes, it's a bit janky
+  metadata(ME)[["SNPs"]] <- altExp(ME, "SNP") # for MBE()
+  return(ME)
 
 }

@@ -29,6 +29,7 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
   if (g == "custom" & (is.null(custom) | !is(custom, "GRanges"))) {
     stop("You must provide a GRanges of blocks if using custom blocks.")
   } else {
+    # FIXME: this is gross 
     if (exists("methBlocks")) {
       message("You seem to have defined `methBlocks` already. Using that.")
     } else { 
@@ -68,19 +69,18 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
   placeholder <- rownames(subset(methBlocks, !duplicated(methBlocks[[g]])))
   blockBetas <- getBeta(x[placeholder, ])
   rownames(blockBetas) <- names(mbgr) 
+
   # only recompute regions with more than one probe
   byBlock[[g]] <- factor(byBlock[[g]])
   toSquash <- split.data.frame(getBeta(x[rownames(byBlock), ]), byBlock[[g]])
   res <- do.call(rbind, lapply(toSquash, colMeans, na.rm=TRUE)) # bplapply fails
   blockBetas[rownames(res), ] <- res
  
-  message("Reconstructing ", class(x), "...")
+  if (!is(x, "MethylationExperiment")) message("Reconstructing ",class(x),"...")
   amb <- x[seq_len(nrow(blockBetas)), ]
   rownames(amb) <- rownames(blockBetas)
   assay(amb, "Beta") <- blockBetas
   rowRanges(amb) <- mbgr
-
-  message("Putting block mappings into metadata...")
 
   message("Done.")
   return(amb)

@@ -28,8 +28,7 @@
 MethBlockExperiment <- function(x, ...) {
 
   # drop non-CpG probes; keep SNP barcodes
-  x <- unsplitAltExps(x, prefix.rows=FALSE)
-  y <- asMethBlocks(x[grep("^cg", rownames(x)), ], ...)
+  y <- asMethBlocks(removeAltExps(x), ...)
   class(y) <- "MethBlockExperiment"
   y
 
