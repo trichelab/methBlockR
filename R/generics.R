@@ -1,114 +1,44 @@
-# getGreen 
-if (!isGeneric("getGreen")) {
-  setGeneric("getGreen", 
-             function(object) standardGeneric("getGreen"))
-}
+if (!isGeneric("getBeta")) 
+  setGeneric("getBeta", function(object, ...) standardGeneric("getBeta"))
 
-setMethod("getGreen", "SummarizedExperiment", 
-          function(object) assay(object, "Green"))
+if (!isGeneric("getM")) 
+  setGeneric("getM", function(object, ...) standardGeneric("getM"))
 
+if (!isGeneric("getCN")) 
+  setGeneric("getCN", function(object, ...) standardGeneric("getCN"))
 
-# getRed
-if (!isGeneric("getRed")) {
-  setGeneric("getRed", 
-             function(object) standardGeneric("getRed"))
-}
-
-setMethod("getRed", "SummarizedExperiment", 
-          function(object) assay(object, "Red"))
+if (!isGeneric("getSNPs")) 
+  setGeneric("getSNPs", function(object, ...) standardGeneric("getSNPs"))
 
 
-# annotation
-if (!isGeneric("annotation")) {
-  setGeneric("annotation", 
-             function(object, ...) standardGeneric("annotation"))
-}
-
-#' @export
-#'
-setMethod("annotation", "SummarizedExperiment", 
-          function(object, ...) metadata(object)$annotation)
-
-
-# annotation<-
-if (!isGeneric("annotation<-")) {
-  setGeneric("annotation<-", 
-             function(object, ..., value) standardGeneric("annotation<-"))
-}
-
-#' @export
-#'
-setReplaceMethod("annotation", c(object="SummarizedExperiment", value="ANY"),
-                 function(object, ..., value) {
-                   metadata(object)$annotation <- value
-                   return(object)
-                 })
-
-
-# preprocessMethod
-if (!isGeneric("preprocessMethod")) {
-  setGeneric("preprocessMethod", 
-             function(object) standardGeneric("preprocessMethod"))
-}
-
-setMethod("preprocessMethod", "SummarizedExperiment", 
-          function(object) metadata(object)$preprocessMethod)
-
-
-
-# helper fns
-.M2B <- function(x) (2 ** x) / (1 + (2 ** x))
+# helper function
 .B2M <- function(p) log2(p / (1 - p))
 
-if (!isGeneric("getBeta")) {
-  setGeneric("getBeta", 
-             function(object, ...) standardGeneric("getBeta"))
-}
 
-setMethod("getBeta", "SummarizedExperiment", 
-          function(object, ...) {
-            if ("Beta" %in% assayNames(object)) assay(object, "Beta")
-            else if ("M" %in% assayNames(object)) .M2B(assay(object, "M"))
-            else stop("No Beta or M assay found")
-          })
+#' @export
+#'
+setMethod("getBeta", "MethylationExperiment", 
+          function(object, ...) assay(object, "Beta"))
 
-if (!isGeneric("getM")) {
-  setGeneric("getM", 
-             function(object, ...) standardGeneric("getM"))
-}
+#' @export
+#'
+setMethod("getM", "MethylationExperiment", 
+          function(object, ...) .B2M(assay(object, "Beta")))
 
-setMethod("getM", "SummarizedExperiment", 
-          function(object, ...) {
-            if ("M" %in% assayNames(object)) assay(object, "M")
-            else if ("Beta" %in% assayNames(object)) .B2M(assay(object, "Beta"))
-            else stop("No Beta or M assay found")
-          })
-
-
-if (!isGeneric("getCN")) {
-  setGeneric("getCN", 
-             function(object, ...) standardGeneric("getCN"))
-}
+#' @export
+#'
 setMethod("getCN", "SummarizedExperiment", 
           function(object, ...) assay(object, "CN"))
-setMethod("getCN", "MethylationExperiment", 
-          function(object, ...) object@CN)
 
+#' @export
+#'
+setMethod("getSNPs", "MethylationExperiment", 
+          function(object, ...) assay(altExp(object, "SNPs"), "Beta"))
 
-if (!isGeneric("getMeth")) {
-  setGeneric("getMeth", 
-             function(object) standardGeneric("getMeth"))
-}
-setMethod("getMeth", "SummarizedExperiment", 
-          function(object) getBeta(object) * (2 ** getCN(object)))
-
-
-if (!isGeneric("getUnmeth")) {
-  setGeneric("getUnmeth",
-             function(object) standardGeneric("getUnmeth"))
-}
-setMethod("getUnmeth", "SummarizedExperiment", 
-          function(object) (1 - getBeta(object)) * (2 ** getCN(object)))
+#' @export
+#'
+setMethod("getSNPs", "MethBlockExperiment", 
+          function(object, ...) metadata(object)$SNPs)
 
 
 # used in missingness() below
@@ -118,6 +48,7 @@ if (!isGeneric("missingness")) {
   setGeneric("missingness", 
              function(X, MARGIN, i, ...) standardGeneric("missingness"))
 }
+
 #' @export
 #'
 setMethod("missingness", c(X="ANY", MARGIN="missing", i="missing"),
@@ -170,14 +101,3 @@ setMethod("missingness", c("matrix", "numeric", "num_or_char"),
            colSums(is.na(X)) / nrow(X))
 
   })
-
-
-if (!isGeneric("getSNPs")) {
-  setGeneric("getSNPs", 
-             function(object, ...) standardGeneric("getSNPs"))
-}
-
-#' @export
-#'
-setMethod("getSNPs", "MethylationExperiment", 
-          function(object, ...) object@SNPs)

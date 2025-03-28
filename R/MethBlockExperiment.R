@@ -11,7 +11,8 @@
 #' right tool for the experimental question at hand. We find that methylation 
 #' blocks are often the right tool for modeling cell states and fates. 
 #'
-#' Note that genome(MBE) <- 'hg38' or similar will trigger remapping of rows.
+#' Note that genome(MBE) <- 'hg38' or similar will attempt remapping of rows.
+#' If this fails, the original (un-remapped) object will be returned instead.
 #'
 #' @param x       a MethylationExperiment
 #' @param ...     additional arguments to asMethBlocks
@@ -26,7 +27,9 @@
 #'
 MethBlockExperiment <- function(x, ...) {
 
-  y <- asMethBlocks(x, ...)
+  # drop non-CpG probes; keep SNP barcodes
+  x <- unsplitAltExps(x, prefix.rows=FALSE)
+  y <- asMethBlocks(x[grep("^cg", rownames(x)), ], ...)
   class(y) <- "MethBlockExperiment"
   y
 
@@ -42,9 +45,9 @@ MethBlockExperiment <- function(x, ...) {
 setReplaceMethod("genome", "MethBlockExperiment", 
   function(x, value) {
 
-    y <- switchMethBlocksGenome(x, value)
-    validObject(y)
-    y
+    y <- try(switchMethBlocksGenome(x, value))
+    if (!inherits(y, "try-error")) return(y)
+    else x
 
   }
 )

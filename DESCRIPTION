@@ -1,6 +1,6 @@
 Package: methBlockR
 Title: massage methylation loci into regulatory blocks and back
-Version: 0.9.8
+Version: 0.9.9
 Authors@R: person("Tim","Triche", 
                   email = "tim.triche@gmail.com", 
                   role = c("aut","cre"),
@@ -19,8 +19,8 @@ Description: Methylation blocks are a convenient abstraction for 'loci where
              methylation rates at each locus. That said, it sometimes is the 
              case that low-coverage or poorly-targeted loci end up better 
              approximated by a block-wise methylation rate than by local ratio.
-Depends:     BiocGenerics,
-             SummarizedExperiment
+Depends:     SingleCellExperiment,
+             sesame
 Imports:     GenomicRanges,
              RaggedExperiment,
              BiocParallel

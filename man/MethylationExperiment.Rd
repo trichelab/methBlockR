@@ -2,44 +2,25 @@
 % Please edit documentation in R/MethylationExperiment.R
 \name{MethylationExperiment}
 \alias{MethylationExperiment}
-\alias{colnames<-,MethylationExperiment-method}
-\alias{CN<-,MethylationExperiment-method}
-\alias{SNPs<-,MethylationExperiment-method}
-\alias{[,MethylationExperiment,ANY,ANY,ANY-method}
 \title{MethylationExperiment() constructor function}
 \usage{
-MethylationExperiment(..., CN = NULL, SNPs = NULL)
-
-\S4method{colnames}{MethylationExperiment}(x) <- value
-
-\S4method{CN}{MethylationExperiment}(x) <- value
-
-\S4method{SNPs}{MethylationExperiment}(x) <- value
-
-\S4method{[}{MethylationExperiment,ANY,ANY,ANY}(x, i, j, drop = TRUE)
+MethylationExperiment(...)
 }
 \arguments{
 \item{...}{arguments passed to the SingleCellExperiment() constructor}
-
-\item{CN}{a copynumber representation (see Details) or NULL (the default).}
-
-\item{SNPs}{a SNP matrix or NULL (the default).}
 }
 \value{
 a MethylationExperiment
 }
 \description{
-A MethylationExperiment object must have its ncols() the same across
-assays, CN, and SNPs (if the latter are not NULL). The rownames are
-usually different (as are the number of rows) for these slots.
+MethylationExperiment() constructor function
 }
 \details{
-the @CN slot can be a GRangesList, a RaggedExperiment, or NULL.
 If openSesameToME is used, a matrix of total intensities can
-be added to assays(object, "CN") with per-probe intensities, but
-the @CN slot exists to hold CN estimates across \emph{multiple} probes,
-and is meant to be populated via conumee2::CNV.fit or similar.
+be added to assays(object, "CN") with per-probe intensities.
+SingleCellExperiment::splitAltExps separates CpG, CpH & SNP probes.
 }
 \seealso{
-openSesameToME
+\if{html}{\out{<div class="sourceCode">}}\preformatted{openSesameToME
+}\if{html}{\out{</div>}}
 }
