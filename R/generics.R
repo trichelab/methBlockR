@@ -50,26 +50,60 @@ if (!isGeneric("missingness")) {
 setClassUnion("num_or_char", c("numeric", "character"))
 
 # used in missingness() below
-.missingnessParamsOk <- function(X, MARGIN, i, ...) { 
+setClassUnion("mat_or_df", c("matrix", "data.frame"))
+
+# used in missingness() below
+.missingnessParamsOk <- function(X, MARGIN, i=1L, ...) { 
 
   msg <- NULL
-  if (!(MARGIN %in% 1:2)) 
-    msg <- c(msg, "MARGIN must be either 1 or 2 for missingness()")
-  if (0L == dim(X)[MARGIN])
-    msg <- c(msg, "Nothing to evaluate: dim(<",class(X),">)[",MARGIN,"] == 0")
-  if (is(X, "SummarizedExperiment") & (0L == length(assays(X))))
-    msg <- c(msg, "Nothing to evaluate: length(assays(<",class(X),">)) == 0")
-  if (is.numeric(i) & is(X, "SummarizedExperiment") & (length(assays(X)) < i))
-    msg <- c(msg, "Nothing to evaluate: length(assays(<",class(X),">)) < ", i)
-  if (is.character(i) & is(X, "SummarizedExperiment") & !(i %in% assayNames(X)))
-    msg <- c(msg,"Nothing to evaluate: ",i," not in assayNames(<",class(X),">)")
-  if (!is.null(msg)) 
-    stop(msg)
-  if (is.null(msg))
-    TRUE
+  if (!(MARGIN %in% 1:2)) {
+    msg <- c(msg, "MARGIN must be 1 or 2 for missingness(X, MARGIN)")
+  } else if (0L == dim(X)[MARGIN]) {
+    msg <- c(msg, "Nothing to do: dim(<",class(X),">)[",MARGIN,"] == 0")
+  }
+
+  if (is(X, "SummarizedExperiment")) {
+    if (0L == length(assays(X)))
+      msg <- c(msg, "Nothing to do: length(assays(<", class(X), ">)) == 0")
+    if (is.numeric(i) & length(assays(X)) < i)
+      msg <- c(msg, "Nothing to do: length(assays(<", class(X), ">)) < ", i)
+    if (is.character(i) & !(i %in% assayNames(X)))
+      msg <- c(msg,"Nothing to do: ", i, " %in% assayNames(<", class(X), ">)")
+  }
+
+  if (!is.null(msg)) {
+    message("Error: ", msg) 
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
 
 }
 
+#' missingness() 
+#'
+#' What fraction of a rectangular data structure is NA, by row or by column?
+#'
+#' @param X       a rectangular data structure
+#' @param MARGIN  which margin to tally on (1=rows, 2=columns) (2) 
+#' @param i       which assay to tally, if X is a SummarizedExperiment
+#' @param ...     other parameters, currently ignored
+#'
+#' @examples  
+#'
+#' vals <- runif(n=100)
+#' is.na(vals) <- as.logical(rbinom(length(vals), size=1, prob=0.1))
+#' mat <- matrix(vals, ncol=20, nrow=5)
+#' colnames(mat) <- paste0("column", seq_len(ncol(mat)))
+#' rownames(mat) <- paste0("row", seq_len(nrow(mat)))
+#' missingness(mat)
+#' missingness(mat, 1)
+#'
+#' @seealso applySCE
+#' @seealso rowSums
+#' @seealso colSums
+#' @seealso is.na
+#'
 #' @export
 #'
 setMethod("missingness", c(X="ANY", MARGIN="missing", i="missing"),
@@ -87,52 +121,22 @@ setMethod("missingness", c(X="ANY", MARGIN="missing", i="num_or_char"),
 
 #' @export
 #'
+setMethod("missingness", c("mat_or_df", "numeric", "num_or_char"),
+  function(X, MARGIN, i, ...) {
+    
+    if (.missingnessParamsOk(X, MARGIN=MARGIN)) { 
+      switch(MARGIN, rowSums(is.na(X))/ncol(X), colSums(is.na(X))/nrow(X))
+    }
+
+  })
+
+#' @export
+#'
 setMethod("missingness", c("SummarizedExperiment", "numeric", "num_or_char"),
   function(X, MARGIN, i, ...) {
 
-    if (.missingnessParamsOk(X, MARGIN, i, ...)) { 
-      switch(MARGIN,
-             rowSums(is.na(assay(X, i))) / ncol(X),
-             colSums(is.na(assay(X, i))) / nrow(X))
-    }
-
-  })
-
-#' @export
-#'
-setMethod("missingness", c("matrix", "numeric", "num_or_char"),
-  function(X, MARGIN, i, ...) {
-    
-    if (.missingnessParamsOk(X, MARGIN, i, ...)) { 
-      switch(MARGIN,
-             rowSums(is.na(assay(X, i))) / ncol(X),
-             colSums(is.na(assay(X, i))) / nrow(X))
-    }
-
-  })
-
-
-#' @export
-#'
-setMethod("missingness", c("MethylationExperiment", "numeric", "num_or_char"),
-  function(X, MARGIN, i, ...) {
-
-    if (.missingnessParamsOk(X, MARGIN, i, ...)) { 
-      applySCE(X, missingness, MARGIN=MARGIN, i=i, ...)
-    }
-
-  })
-
-#' @export
-#'
-setMethod("missingness", c("MethBlockExperiment", "numeric", "num_or_char"),
-  function(X, MARGIN, i, ...) {
-    
-    # override MethylationExperiment behavior
-    if (.missingnessParamsOk(X, MARGIN, i, ...)) { 
-      switch(MARGIN,
-             rowSums(is.na(assay(X, i))) / ncol(X),
-             colSums(is.na(assay(X, i))) / nrow(X))
+    if (.missingnessParamsOk(X, MARGIN, i)) {
+      missingness(assay(X, i), MARGIN=MARGIN)
     }
 
   })
