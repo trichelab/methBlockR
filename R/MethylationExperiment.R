@@ -76,7 +76,7 @@ openSesameToME <- function(IDATs, BPPARAM=NULL, intensities=TRUE, cd=NULL, ...){
   ME <- MethylationExperiment(assays=asys, rowData=rd)
   ME <- splitAltExps(ME, rowData(ME)$type, ref="CpG")
   colnames(ME) <- basename(IDATs) # yes, it's a bit janky
-  metadata(ME)[["SNPs"]] <- altExp(ME, "SNP") # for MBE()
+  metadata(ME)[["SNPs"]] <- getBeta(altExp(ME, "SNP")) # for MBE()
   return(ME)
 
 }

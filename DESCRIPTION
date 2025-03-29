@@ -1,29 +1,33 @@
 Package: methBlockR
-Title: massage methylation loci into regulatory blocks and back
+Title: cook methylation data down to regulatory blocks for distribution & reuse
 Version: 0.9.10
 Authors@R: person("Tim","Triche", 
-                  email = "tim.triche@gmail.com", 
+                  email = "trichelab@gmail.com", 
                   role = c("aut","cre"),
                   comment = c(ORCID = "0000-0001-5665-946X"))
 Description: Methylation blocks are a convenient abstraction for 'loci where 
-             DNA methylation changes concordantly between conditions or states'
-             proposed by Loyfer (Nature, 2023). Said blocks are also a simple 
-             mechanism to exchange data back and forth between deep (array) 
-             and wide (sequencing based) assays, thereby leveraging the huge 
-             number of samples already profiled on the former to speed adoption 
-             of the latter. The functions provided ease movement between blocks
-             and loci. Note that 'fromMethBlocks' only expands the dimension
-             of a methBlocked dataset to match that of a locus-level dataset; 
-             without an underlying model such as NMF or a VAE, it is not trivial
-             to provide anything more than an estimation of block-level
-             methylation rates at each locus. That said, it sometimes is the 
-             case that low-coverage or poorly-targeted loci end up better 
-             approximated by a block-wise methylation rate than by local ratio.
+             DNA methylation changes concordantly between conditions or states'.
+             Highlighted by Loyfer (Nature, 2023), these provide a mechanism to 
+             reconcile data between deep (array) and wide (sequencing) assays. 
+             This in turn offers a way to leverage plentiful array-based samples
+             without neglecting key advantages of the sequencing-based assays,
+             such as readouts of correlated methylation blocks within fragments.
+             It is often the case that low-coverage sequencing data are better 
+             matched by block-wise methylation rates than by locus-level ratios.
+             Lightweight workflows and classes for preprocessing/QC of Illumina
+             methylation data, mostly via sesame and conumee2, are provided to 
+             complement the 'distillation' of data and to evaluate its fidelity.
 Depends:     SingleCellExperiment,
+             ComplexHeatmap,
+             BiocParallel,
              sesame
 Imports:     GenomicRanges,
              RaggedExperiment,
-             BiocParallel
+             circlize,
+             mixR
+Suggests:    CNVRanger,
+             CNVfilteR,
+             conumee2
 License: MIT
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -33,7 +33,7 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
     if (exists("methBlocks")) {
       message("You seem to have defined `methBlocks` already. Using that.")
     } else { 
-      data("methBlocks", package="methBlockR") 
+      data("methBlocks")
     }
   }
 

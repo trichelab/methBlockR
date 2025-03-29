@@ -21,7 +21,7 @@ switchMethBlocksGenome <- function(x, to=c("hg38", "hg19")) {
     return(x) 
   } else {
     message("Switching genome from ", from, " to ", to, "...") 
-    data("mbHg19Hg38", package="methBlockR")
+    data("mbHg19Hg38")
     mb <- subset(mbHg19Hg38, mbHg19Hg38[[from]] %in% rownames(x))
     mappable <- nrow(mb)
     mb <- subset(mb, !is.na(mb[[to]]))
