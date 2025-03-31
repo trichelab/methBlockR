@@ -21,10 +21,10 @@ openSesameToME(IDATs, BPPARAM = NULL, intensities = TRUE, cd = NULL, ...)
 Construct a MethylationExperiment from IDATs.
 }
 \details{
-SNPs will be read in first, so that any failures happen quickly.
-BPPARAM=MulticoreParam(progressbar=TRUE) is a good starting point.
-We hope to eventually support FileSetExperiment as a backend,
-or some sort of materialized slice-able on-disk format.
+BPPARAM=MulticoreParam(progressbar=TRUE) is usually a good idea.
+In the event that multiple array formats are detected, the function
+will attempt to rationalize the output by injecting NAs into the
+probe-level output from the smaller arrays, and raising a warning.
 }
 \seealso{
 BiocParallel::MulticoreParam

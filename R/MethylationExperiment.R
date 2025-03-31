@@ -37,10 +37,10 @@ MethylationExperiment <- function(...) {
 #' @param cd          optional colData; rownames must match colnames of betas
 #' @param ...         other arguments passed to sesame::openSesame()
 #'
-#' @details SNPs will be read in first, so that any failures happen quickly. 
-#'          BPPARAM=MulticoreParam(progressbar=TRUE) is a good starting point.
-#'          We hope to eventually support FileSetExperiment as a backend,
-#'          or some sort of materialized slice-able on-disk format.
+#' @details BPPARAM=MulticoreParam(progressbar=TRUE) is usually a good idea. 
+#'          In the event that multiple array formats are detected, the function
+#'          will attempt to rationalize the output by injecting NAs into the 
+#'          probe-level output from the smaller arrays, and raising a warning.
 #'
 #' @seealso BiocParallel::MulticoreParam
 #' @seealso MethylationExperiment
@@ -59,18 +59,49 @@ openSesameToME <- function(IDATs, BPPARAM=NULL, intensities=TRUE, cd=NULL, ...){
   # process the IDAT files 
   message("Reading IDATs...")
   sdfs <- bplapply(IDATs, BPPARAM=BPPARAM, readIDATpair)
-  
+  rows <- vapply(sdfs, nrow, 1L) 
+  if (length(unique(rows)) > 1) warning("Multiple array types detected.")
+
   # if that succeeds, read beta values
   message("Processing beta values...")
-  asys <- list(Beta=openSesame(sdfs, ..., BPPARAM=BPPARAM, func=getBetas))
+  Beta <- openSesame(sdfs, ..., BPPARAM=BPPARAM, func=getBetas)
+  probes <- names(Beta[[which.max(rows)]])
+
+  # wrap this better (DRY)
+  if (length(unique(rows)) > 1) {
+    message("Merging platforms...")
+    Beta <- do.call(cbind, 
+                    lapply(Beta, 
+                           function(b) {
+                             bb <- rep(NA_real_, length(probes))
+                             names(bb) <- probes
+                             pb <- intersect(probes, names(b))
+                             bb[pb] <- b[pb]
+                             return(bb)
+                           }))
+  }
+  asys <- list(Beta=Beta)
   rd <- data.frame(row.names=rownames(asys[["Beta"]]))
   rd$type <- c(cg="CpG", ch="CpH", rs="SNP")[substr(rownames(rd), 1, 2)]
 
   # if requested, CN
   if (intensities) {
     message("Processing intensities for copy number analysis...")
-    asys[["CN"]] <- openSesame(sdfs, func=totalIntensities, BPPARAM=BPPARAM)
-  } 
+    CN <- openSesame(sdfs, func=totalIntensities, BPPARAM=BPPARAM)
+    if (length(unique(rows)) > 1) {
+      message("Merging platforms...")
+      CN <- do.call(cbind,
+                    lapply(CN, 
+                           function(i) {
+                             ii <- rep(NA_real_, length(probes))
+                             names(ii) <- probes
+                             p <- intersect(probes, names(i))
+                             ii[p] <- i[p]
+                             return(ii)
+                           }))
+    }
+    asys[["CN"]] <- CN
+  }
 
   # construct the object & partition with splitAltExps
   ME <- MethylationExperiment(assays=asys, rowData=rd)

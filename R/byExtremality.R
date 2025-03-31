@@ -16,7 +16,7 @@
 #' @param     k   how many rows to return (500)
 #' @return    the most extremal _k_ rows of _x_
 #' 
-#' @import    matrixStats
+#' @importFrom matrixStats rowMeans2 rowSds
 #' 
 #' @export
 byExtremality <- function(x, k=500) {
