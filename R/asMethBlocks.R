@@ -82,6 +82,14 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
   assay(amb, "Beta") <- blockBetas
   rowRanges(amb) <- mbgr
 
+  # add tracking coordinates for alternative genomes to rowData(amb)
+  data(mbHg19Hg38) # need to expand this to mm10, T2T, HPRC, etc. 
+  ord <- match(rownames(amb), mbHg19Hg38[[g]])
+  rowData(amb)[[g]] <- mbHg19Hg38[ord, g]
+  for (h in setdiff(names(mbHg19Hg38), g)) {
+    rowData(amb)[[h]] <- mbHg19Hg38[ord, h]
+  }
+
   message("Done.")
   return(amb)
 

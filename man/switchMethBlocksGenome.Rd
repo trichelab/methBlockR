@@ -16,7 +16,7 @@ switchMethBlocksGenome(x, to = c("hg38", "hg19"))
 }\if{html}{\out{</div>}}
 }
 \description{
-Probably need to start keeping track of probe-probe mapping in md()$blocks
+Now keeping track of genome-to-genome mappings in rowData() of the result
 }
 \seealso{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{    asMethBlocks
