@@ -127,7 +127,7 @@ setMethod("plot", c("MethylationExperiment", "numeric"),
     jet <- colorRamp2(seq(0, 1, 0.125),
                       c("#00007F", "blue", "#007FFF", "cyan",
                         "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
-    H1 <- Heatmap(as(toPlot, "matrix"), col=jet, name="Methylation", 
+    H1 <- Heatmap(as(t(toPlot), "matrix"), col=jet, name="Methylation", 
                   clustering_distance_columns="manhattan",
                   clustering_method_columns="ward.D2",
                   clustering_distance_rows="manhattan",
