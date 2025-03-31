@@ -111,3 +111,29 @@ openSesameToME <- function(IDATs, BPPARAM=NULL, intensities=TRUE, cd=NULL, ...){
   return(ME)
 
 }
+
+
+# convenience methods
+setMethod("plot", c("MethylationExperiment", "missing"), 
+  function(x, y, ...) plot(x, 500L, ...))
+  
+setMethod("plot", c("MethylationExperiment", "numeric"), 
+  function(x, y, ...) {
+
+    k <- intersect(seqlevels(x), paste0("chr", 1:22))
+    b <- getBeta(keepSeqlevels(x, k, pruning.mode="coarse"))
+    toPlot <- byExtremality(b, y)
+    
+    jet <- colorRamp2(seq(0, 1, 0.125),
+                      c("#00007F", "blue", "#007FFF", "cyan",
+                        "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
+    H1 <- Heatmap(as(toPlot, "matrix"), col=jet, name="Methylation", 
+                  clustering_distance_columns="manhattan",
+                  clustering_method_columns="ward.D2",
+                  clustering_distance_rows="manhattan",
+                  clustering_method_rows="ward.D2",
+                  ...)
+    H2 <- plotSNPcalls(x, rotate=TRUE)
+    H1 + H2
+
+})

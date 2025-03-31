@@ -140,3 +140,13 @@ setMethod("missingness", c("SummarizedExperiment", "numeric", "num_or_char"),
     }
 
   })
+
+
+#' @export
+#' @importMethodsFrom SummarizedExperiment show
+#' 
+setMethod("show", "MethBlockExperiment", 
+  function(object) {
+    callNextMethod()
+    cat("genome:", unique(genome(object)), "\n")
+  })

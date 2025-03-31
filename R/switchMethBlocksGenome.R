@@ -1,5 +1,7 @@
 #' Given an object with methylation block coordinates, switch the genome
 #'
+#' Probably need to start keeping track of probe-probe mapping in md()$blocks
+#'
 #' @param x         a GenomicRatioSet or something like it with methBlock coords
 #' @param to        the new genome to use (hg19 or hg38) 
 #'
@@ -16,6 +18,7 @@ switchMethBlocksGenome <- function(x, to=c("hg38", "hg19")) {
   
   to <- match.arg(to)
   from <- unique(genome(x))
+  if (is.na(from)) stop("The genome of the object cannot be NA!") 
   if (from == to) {
     message("Genome is already ", to, ". No need to switch.")
     return(x) 
@@ -25,6 +28,20 @@ switchMethBlocksGenome <- function(x, to=c("hg38", "hg19")) {
     mb <- subset(mbHg19Hg38, mbHg19Hg38[[from]] %in% rownames(x))
     mappable <- nrow(mb)
     mb <- subset(mb, !is.na(mb[[to]]))
+    dupesFrom <- length(mb[which(duplicated(mb[[from]])), from])
+    if (dupesFrom > 0) {
+      warning(dupesFrom, "duplicate mappings found; dropping. Check results!")
+      mb <- subset(mb, !duplicated(mb[[from]]))
+      message(nrow(mb), " mappings remain.")
+      mapped <- nrow(mb)
+    }
+    dupesTo <- length(mb[which(duplicated(mb[[to]])), to])
+    if (dupesTo > 0) {
+      warning(dupesTo, " duplicate mappings found; dropping. Check results!")
+      mb <- subset(mb, !duplicated(mb[[to]]))
+      message(nrow(mb), " mappings remain.")
+      mapped <- nrow(mb)
+    }
     mapped <- nrow(mb)
     rownames(mb) <- mb[[from]]
     message("Found ", mapped, " / ", mappable, 
@@ -32,7 +49,9 @@ switchMethBlocksGenome <- function(x, to=c("hg38", "hg19")) {
     x <- x[rownames(mb), ]
     rowRanges(x) <- as(mb[[to]], "GRanges")
     rownames(x) <- mb[[to]]
-    genome(x) <- to
+
+    # sidestep caution from MBE()
+    genome(rowRanges(x)) <- to
     return(x)
   } 
 

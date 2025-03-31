@@ -16,7 +16,7 @@ switchMethBlocksGenome(x, to = c("hg38", "hg19"))
 }\if{html}{\out{</div>}}
 }
 \description{
-Given an object with methylation block coordinates, switch the genome
+Probably need to start keeping track of probe-probe mapping in md()$blocks
 }
 \seealso{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{    asMethBlocks

@@ -35,8 +35,9 @@ plotSNPcalls <- function(x, rotate=FALSE, ...) {
 .plotSNPcallmat <- function(SNPs_called, ...) {
 
   SNP_colors <- colorRamp2(seq(0, 2), c("#00007F", "yellow", "#7F0000"))
+  toUse <- which(missingness(SNPs_called, 1) < .5)
   
-  Heatmap(SNPs_called,
+  Heatmap(SNPs_called[toUse, ],
           col=SNP_colors, 
           name="Alleles",
           clustering_method_columns='ward.D2', 

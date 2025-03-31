@@ -30,9 +30,6 @@ right tool for the experimental question at hand. We find that methylation
 blocks are often the right tool for modeling cell states and fates.
 }
 \details{
-Note that genome(MBE) <- 'hg38' or similar will attempt remapping of rows.
-If this fails, the original (un-remapped) object will be returned instead.
-
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  Can go straight from IDATs to blocks by chaining this. 
 }\if{html}{\out{</div>}}
 }

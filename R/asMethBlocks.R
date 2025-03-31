@@ -25,16 +25,16 @@
 asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
 
   g <- match.arg(g)
+  if (is(x, "MethylationExperiment")) { 
+    # coerce the object so that we can pass it through the constructor
+    return(MethBlockExperiment(as(x, "SingleCellExperiment"), g=g))
+  }
+
   stopifnot(is(x, "SummarizedExperiment"))
   if (g == "custom" & (is.null(custom) | !is(custom, "GRanges"))) {
     stop("You must provide a GRanges of blocks if using custom blocks.")
   } else {
-    # FIXME: this is gross 
-    if (exists("methBlocks")) {
-      message("You seem to have defined `methBlocks` already. Using that.")
-    } else { 
-      data("methBlocks")
-    }
+    data("methBlocks")
   }
 
   message("Checking for masked (NA) probes...")

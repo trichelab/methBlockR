@@ -37,8 +37,8 @@ SNPcalls <- function(SNPs) {
   x <- as.numeric(flogit(y[yy]))
   res <- suppressMessages(try(mixR::select(x=x, ncomp=1:3), silent=TRUE))
   if (!inherits(res, "try-error")) {
-    k <- res$ncomp[which(res$best == "*")]
-    SNPfit <- mixR::mixfit(x=x, ncomp=k)
+    ncomp <- res$ncomp[which(res$best == "*")]
+    SNPfit <- mixR::mixfit(x=x, ncomp=ncomp)
     SNPprob <- SNPfit$comp.prob
     SNPclass <- apply(SNPprob, 1, which.max) - 1
     if (length(SNPclass) == length(x)) {
