@@ -27,6 +27,7 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
   g <- match.arg(g)
   if (is(x, "MethylationExperiment")) { 
     # coerce the object so that we can pass it through the constructor
+    assay(x, "CN") <- NULL # drop intensities since we move to rates
     return(MethBlockExperiment(as(x, "SingleCellExperiment"), g=g))
   }
 
@@ -39,7 +40,7 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
 
   message("Checking for masked (NA) probes...")
   N <- ncol(x)
-  keepCpGs <- rownames(x)[rowSums(is.na(getBeta(x))) < N]
+  keepCpGs <- rownames(x)[rowSums(is.na(assay(x, "Beta"))) < N]
   M <- length(keepCpGs)
   dropCpGs <- setdiff(rownames(x), keepCpGs)
   M_NA <- length(dropCpGs)
@@ -67,12 +68,13 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
 
   message("Computing per-block average methylation across ", M, " probes...")
   placeholder <- rownames(subset(methBlocks, !duplicated(methBlocks[[g]])))
-  blockBetas <- getBeta(x[placeholder, ])
+  blockBetas <- assay(x[placeholder, ], "Beta")
   rownames(blockBetas) <- names(mbgr) 
 
   # only recompute regions with more than one probe
   byBlock[[g]] <- factor(byBlock[[g]])
-  toSquash <- split.data.frame(getBeta(x[rownames(byBlock), ]), byBlock[[g]])
+  toSquash <- split.data.frame(assay(x[rownames(byBlock), ], "Beta"), 
+                               byBlock[[g]])
   res <- do.call(rbind, lapply(toSquash, colMeans, na.rm=TRUE)) # bplapply fails
   blockBetas[rownames(res), ] <- res
  
