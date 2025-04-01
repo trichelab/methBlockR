@@ -29,7 +29,11 @@ plotME <- function(x, k=500, ...) {
                   clustering_distance_rows="manhattan",
                   clustering_method_rows="ward.D2",
                   ...)
-    H2 <- plotSNPcalls(x, rotate=TRUE)
-    H1 + H2
+    if ("SNPs" %in% names(metadata(x))) { 
+      H2 <- plotSNPcalls(x, rotate=TRUE)
+      H1 + H2
+    } else { 
+      H1
+    } 
 
 }
