@@ -4,16 +4,16 @@
 \alias{plotME}
 \title{plotME}
 \usage{
-plotME(x, k = 500, minmean = 0.05, maxmean = 0.95, ...)
+plotME(x, k = 100, minmean = 0.2, maxmean = 0.8, ...)
 }
 \arguments{
 \item{x}{a MethylationExperiment or MethBlockExperiment}
 
-\item{k}{how many features to use (500)}
+\item{k}{how many features to use (100)}
 
-\item{minmean}{minimum mean for byExtremality (0.05)}
+\item{minmean}{minimum mean for byExtremality (0.2)}
 
-\item{maxmean}{maximum mean for byExtremality (0.95)}
+\item{maxmean}{maximum mean for byExtremality (0.8)}
 
 \item{...}{parameters to pass to Heatmap}
 }

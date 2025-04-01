@@ -3,9 +3,9 @@
 #' plot a MethylationExperiment or MethBlockExperiment features + SNPs
 #'
 #' @param x         a MethylationExperiment or MethBlockExperiment
-#' @param k         how many features to use (500)
-#' @param minmean   minimum mean for byExtremality (0.05)
-#' @param maxmean   maximum mean for byExtremality (0.95)
+#' @param k         how many features to use (100)
+#' @param minmean   minimum mean for byExtremality (0.2)
+#' @param maxmean   maximum mean for byExtremality (0.8)
 #' @param ...       parameters to pass to Heatmap
 #'
 #' @details byExtremality() is called to determine features. A joint plot
@@ -19,7 +19,7 @@
 #'
 #' @export
 #' 
-plotME <- function(x, k=500, minmean=0.05, maxmean=0.95, ...) {
+plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, ...) {
 
     chr <- intersect(seqlevels(x), paste0("chr", 1:22))
     b <- assay(keepSeqlevels(x, chr, pruning.mode="coarse"), "Beta")
