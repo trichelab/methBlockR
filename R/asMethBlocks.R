@@ -83,7 +83,6 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
   res <- do.call(rbind, lapply(toSquash, colMeans, na.rm=TRUE)) # bplapply fails
   blockBetas[rownames(res), ] <- res
  
-  if (!is(x, "MethylationExperiment")) message("Reconstructing ",class(x),"...")
   amb <- x[seq_len(nrow(blockBetas)), ]
   rownames(amb) <- rownames(blockBetas)
   assay(amb, "Beta") <- blockBetas

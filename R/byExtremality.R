@@ -14,21 +14,29 @@
 #'
 #' @param     x   a matrix of beta values (proportions), by block or by locus
 #' @param     k   how many rows to return (500)
-#' @return    the most extremal _k_ rows of _x_
+#' @param minmean minimum mean for byExtremality (0.05)
+#' @param maxmean maximum mean for byExtremality (0.95)
+#'
+#' @return        the most extremal _k_ rows of _x_ (with suitable means)
 #' 
-#' @importFrom matrixStats rowMeans2 rowSds
+#' @details       it turns out that you usually want 0.95 > mean > 0.05
+#'
+#' @importFrom    matrixStats rowMeans2 rowSds
 #' 
 #' @export
-byExtremality <- function(x, k=500) {
+byExtremality <- function(x, k=500, minmean=0.05, maxmean=0.95) {
   k <- min(nrow(x), k)
-  extremality <- .extremality(x)
+  extremality <- .extremality(x, minmean=minmean, maxmean=maxmean)
   x[rev(order(extremality))[seq_len(k)], ]
 }
 
-# helper fn
-.extremality <- function(x) {
+# helper fn; now bounded
+.extremality <- function(x, minmean=0.05, maxmean=0.95) {
   means <- rowMeans2(x, na.rm=TRUE)
   bernoulliSd <- sqrt(means * (1 - means))
   actualSd <- rowSds(x, na.rm=TRUE)
-  pmin(1, actualSd / bernoulliSd)
+  res <- pmin(1, actualSd / bernoulliSd)
+  res[which(means < minmean)] <- 0 
+  res[which(means < maxmean)] <- 0 
+  return(res) 
 }

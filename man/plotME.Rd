@@ -4,12 +4,18 @@
 \alias{plotME}
 \title{plotME}
 \usage{
-plotME(x, k = 500, ...)
+plotME(x, k = 500, minmean = 0.05, maxmean = 0.95, ...)
 }
 \arguments{
 \item{x}{a MethylationExperiment or MethBlockExperiment}
 
 \item{k}{how many features to use (500)}
+
+\item{minmean}{minimum mean for byExtremality (0.05)}
+
+\item{maxmean}{maximum mean for byExtremality (0.95)}
+
+\item{...}{parameters to pass to Heatmap}
 }
 \description{
 plot a MethylationExperiment or MethBlockExperiment features + SNPs
@@ -18,4 +24,6 @@ plot a MethylationExperiment or MethBlockExperiment features + SNPs
 byExtremality() is called to determine features. A joint plot
 of highly variable features on the left and SNPs on the right
 is returned. This function is purely for a convenient first pass.
+Recent experiences with low-coverage WGBS have convinced us that
+bounding minimum and maximum mean is important for byExtremality.
 }
