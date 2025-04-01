@@ -59,12 +59,17 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
   byBlock <- subset(methBlocks, methBlocks[[g]] %in% blocks)[, g, drop=FALSE]
 
   # this will become rowRanges(amb)
-  mbgr <- as(methBlocks[[g]], "GRanges")
-  genome(mbgr) <- g 
-  mbgr$probes <- countOverlaps(mbgr, granges(x)[keepCpGs])
-  mbgr$singleton <- width(mbgr) == 1
-  mbgr <- unique(mbgr)
+  mbgr <- unique(as(methBlocks[[g]], "GRanges"))
   names(mbgr) <- as.character(mbgr)
+  genome(mbgr) <- g 
+
+  # rowData for the results 
+  mbgr$probes <- tbl[names(mbgr)]
+  mbgr$singleton <- width(mbgr) == 1
+  data(mbHg19Hg38) # need to expand this to mm10, T2T, HPRC, etc. 
+  ord <- match(names(mbgr), mbHg19Hg38[[g]])
+  mcols(mbgr)[[g]] <- mbHg19Hg38[ord, g]
+  for (h in setdiff(names(mbHg19Hg38), g)) mcols(mbgr)[[h]] <- mbHg19Hg38[ord,h]
 
   message("Computing per-block average methylation across ", M, " probes...")
   placeholder <- rownames(subset(methBlocks, !duplicated(methBlocks[[g]])))
@@ -83,15 +88,6 @@ asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
   rownames(amb) <- rownames(blockBetas)
   assay(amb, "Beta") <- blockBetas
   rowRanges(amb) <- mbgr
-
-  # add tracking coordinates for alternative genomes to rowData(amb)
-  data(mbHg19Hg38) # need to expand this to mm10, T2T, HPRC, etc. 
-  ord <- match(rownames(amb), mbHg19Hg38[[g]])
-  rowData(amb)[[g]] <- mbHg19Hg38[ord, g]
-  for (h in setdiff(names(mbHg19Hg38), g)) {
-    rowData(amb)[[h]] <- mbHg19Hg38[ord, h]
-  }
-
   message("Done.")
   return(amb)
 
