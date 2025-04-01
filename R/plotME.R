@@ -27,7 +27,7 @@ plotME <- function(x, k=500, minmean=0.05, maxmean=0.95, ...) {
     message("Finding highly extremal features...")
     N <- ncol(x)
     keepFeats <- rownames(b)[which(rowSums(is.na(b)) / N < 0.5)]
-    toPlot <- byExtremality(b[keepFeats,], k)
+    toPlot <- byExtremality(b[keepFeats,], k, minmean=minmean, maxmean=maxmean)
     message("Plotting DNA methylation...")
     jet <- colorRamp2(seq(0, 1, 0.125),
                       c("#00007F", "blue", "#007FFF", "cyan",
@@ -40,10 +40,11 @@ plotME <- function(x, k=500, minmean=0.05, maxmean=0.95, ...) {
                   ...)
     if ("SNPs" %in% names(metadata(x))) { 
       message("Plotting SNPs...")
-      H2 <- plotSNPcalls(x, rotate=TRUE)
-      H1 + H2
-    } else { 
-      H1
-    } 
+      H2 <- try(plotSNPcalls(x, rotate=TRUE))
+      if (!inherits(H2, "try-error")) { 
+        H1 + H2
+      }
+    }
+    H1
 
 }
