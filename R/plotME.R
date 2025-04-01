@@ -18,8 +18,11 @@ plotME <- function(x, k=500, ...) {
 
     chr <- intersect(seqlevels(x), paste0("chr", 1:22))
     b <- getBeta(keepSeqlevels(x, chr, pruning.mode="coarse"))
-    toPlot <- byExtremality(b, k)
-    
+  
+    message("Finding highly extremal features...")
+    N <- ncol(x)
+    keepFeats <- rownames(x)[which(rowSums(is.na(getBeta(x)))/N < 0.5)]
+    toPlot <- byExtremality(b[keepFeats,], k)
     jet <- colorRamp2(seq(0, 1, 0.125),
                       c("#00007F", "blue", "#007FFF", "cyan",
                         "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
