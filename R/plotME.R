@@ -38,12 +38,16 @@ plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, ...) {
                   clustering_method_columns="ward.D2",
                   clustering_distance_rows="manhattan",
                   clustering_method_rows="ward.D2",
+                  column_names_gp = gpar(fontsize=9),
+                  row_names_side="left",
                   ...)
     if ("SNPs" %in% names(metadata(x))) { 
       message("Plotting SNPs...")
-      H2 <- try(suppressMessages(plotSNPcalls(x, rotate=TRUE)), silent=TRUE)
+      H2 <- suppressMessages(try(plotSNPcalls(x, rotate=TRUE, 
+                                              column_names_gp=gpar(fontsize=9)),
+                                 silent=TRUE))
       if (!inherits(H2, "try-error")) { 
-        H1 + H2
+        return(H1 + H2)
       } else { 
         message("SNP calling failed, omitting SNP plot")
       }
