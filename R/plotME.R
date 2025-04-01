@@ -23,6 +23,7 @@ plotME <- function(x, k=500, ...) {
     N <- ncol(x)
     keepFeats <- rownames(x)[which(rowSums(is.na(getBeta(x)))/N < 0.5)]
     toPlot <- byExtremality(b[keepFeats,], k)
+    message("Plotting DNA methylation...")
     jet <- colorRamp2(seq(0, 1, 0.125),
                       c("#00007F", "blue", "#007FFF", "cyan",
                         "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
@@ -33,6 +34,7 @@ plotME <- function(x, k=500, ...) {
                   clustering_method_rows="ward.D2",
                   ...)
     if ("SNPs" %in% names(metadata(x))) { 
+      message("Plotting SNPs...")
       H2 <- plotSNPcalls(x, rotate=TRUE)
       H1 + H2
     } else { 
