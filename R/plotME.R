@@ -6,6 +6,7 @@
 #' @param k         how many features to use (100)
 #' @param minmean   minimum mean for byExtremality (0.2)
 #' @param maxmean   maximum mean for byExtremality (0.8)
+#' @param maxNA     maximum fraction NA for a feature (0.2) 
 #' @param ...       parameters to pass to Heatmap
 #'
 #' @details byExtremality() is called to determine features. A joint plot
@@ -19,14 +20,14 @@
 #'
 #' @export
 #' 
-plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, ...) {
+plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, ...) {
 
     chr <- intersect(seqlevels(x), paste0("chr", 1:22))
     b <- assay(keepSeqlevels(x, chr, pruning.mode="coarse"), "Beta")
   
     message("Finding highly extremal features...")
     N <- ncol(x)
-    keepFeats <- rownames(b)[which(rowSums(is.na(b)) / N < 0.5)]
+    keepFeats <- rownames(b)[which(rowSums(is.na(b)) / N <= maxNA)]
     toPlot <- byExtremality(b[keepFeats,], k, minmean=minmean, maxmean=maxmean)
     message("Plotting DNA methylation...")
     jet <- colorRamp2(seq(0, 1, 0.125),

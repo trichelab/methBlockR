@@ -4,7 +4,7 @@
 \alias{plotME}
 \title{plotME}
 \usage{
-plotME(x, k = 100, minmean = 0.2, maxmean = 0.8, ...)
+plotME(x, k = 100, minmean = 0.2, maxmean = 0.8, maxNA = 0.2, ...)
 }
 \arguments{
 \item{x}{a MethylationExperiment or MethBlockExperiment}
@@ -14,6 +14,8 @@ plotME(x, k = 100, minmean = 0.2, maxmean = 0.8, ...)
 \item{minmean}{minimum mean for byExtremality (0.2)}
 
 \item{maxmean}{maximum mean for byExtremality (0.8)}
+
+\item{maxNA}{maximum fraction NA for a feature (0.2)}
 
 \item{...}{parameters to pass to Heatmap}
 }
