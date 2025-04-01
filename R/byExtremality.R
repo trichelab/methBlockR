@@ -37,6 +37,6 @@ byExtremality <- function(x, k=500, minmean=0.05, maxmean=0.95) {
   actualSd <- rowSds(x, na.rm=TRUE)
   res <- pmin(1, actualSd / bernoulliSd)
   res[which(means < minmean)] <- 0 
-  res[which(means < maxmean)] <- 0 
+  res[which(means > maxmean)] <- 0 
   return(res) 
 }
