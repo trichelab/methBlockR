@@ -44,6 +44,7 @@ plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, ...) {
     if ("SNPs" %in% names(metadata(x))) { 
       message("Plotting SNPs...")
       H2 <- suppressMessages(try(plotSNPcalls(x, rotate=TRUE, 
+                                              cluster_columns=FALSE,
                                               column_names_gp=gpar(fontsize=9)),
                                  silent=TRUE))
       if (!inherits(H2, "try-error")) { 

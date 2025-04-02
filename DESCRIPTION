@@ -1,6 +1,6 @@
 Package: methBlockR
 Title: cook methylation data down to regulatory blocks for distribution & reuse
-Version: 0.9.15
+Version: 0.9.16
 Authors@R: person("Tim","Triche", 
                   email = "trichelab@gmail.com", 
                   role = c("aut","cre"),
