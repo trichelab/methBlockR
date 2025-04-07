@@ -19,7 +19,8 @@ readBetaBlocks <- function(tbx, n=-1, g=NULL) {
   cols <- sub("^(#)+", "", strsplit(readLines(tbx$path, n=1), "\t")[[1]])
 
   # the following rows are matrix columns, possibly preceded by coordinates
-  df <- data.frame(do.call(rbind, strsplit(readLines(tbx$path, n=n+1)[-1], "\t")))
+  nn <- ifelse(n == -1, n, n + 1) 
+  df <- data.frame(do.call(rbind, strsplit(readLines(tbx$path, n=nn)[-1], "\t")))
   names(df) <- cols
  
   # this is where, if coordinates are present, we extract them 
