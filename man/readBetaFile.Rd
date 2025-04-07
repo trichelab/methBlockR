@@ -21,6 +21,8 @@ readBetaFile(x, CpG = NULL, g = NULL)
 read wgbstools .beta file into a matrix (CpG bed into attr(, "GRanges"))
 }
 \details{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{the output is nearly useless without the CpG dictionary. 
+\if{html}{\out{<div class="sourceCode">}}\preformatted{the output is nearly useless without the CpG dictionary. If the
+         size of the file is 56434896, we know g == "hg19", but the CpG
+         dictionary for hg19 is 125MB, so we don't have it in data(). 
 }\if{html}{\out{</div>}}
 }
