@@ -24,7 +24,11 @@
 #'
 MethBlockExperiment <- function(x, ...) {
 
-  metadata(x)$SNPs <- getBeta(altExp(x, "SNP")) # corrected colnames
+  if ("SNP" %in% altExpNames(x)) { 
+    metadata(x)$SNPs <- getBeta(altExp(x, "SNP")) # with colnames
+  }
+  
+  # bit of a kludge, but oh well
   y <- asMethBlocks(as(removeAltExps(x), "SingleCellExperiment"), ...)
   class(y) <- "MethBlockExperiment"
   y
