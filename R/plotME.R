@@ -14,6 +14,7 @@
 #'          is returned. This function is purely for a convenient first pass.
 #'          Recent experiences with low-coverage WGBS have convinced us that
 #'          bounding minimum and maximum mean is important for byExtremality.
+#'          If SNPs cannot be found, only the main methylation plot is returned.
 #'
 #' @import ComplexHeatmap
 #' @import circlize
@@ -43,7 +44,8 @@ plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, ...) {
                   ...)
     if ("SNPs" %in% names(metadata(x))) { 
       message("Plotting SNPs...")
-      H2 <- suppressMessages(try(plotSNPcalls(x, rotate=TRUE, 
+      H2 <- suppressMessages(try(plotSNPcalls(x, qc=TRUE,
+                                              rotate = TRUE,
                                               cluster_columns=FALSE,
                                               column_names_gp=gpar(fontsize=9)),
                                  silent=TRUE))

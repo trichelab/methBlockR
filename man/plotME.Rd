@@ -28,4 +28,5 @@ of highly variable features on the left and SNPs on the right
 is returned. This function is purely for a convenient first pass.
 Recent experiences with low-coverage WGBS have convinced us that
 bounding minimum and maximum mean is important for byExtremality.
+If SNPs cannot be found, only the main methylation plot is returned.
 }

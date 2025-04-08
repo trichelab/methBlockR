@@ -4,12 +4,14 @@
 \alias{plotSNPcalls}
 \title{call and plot SNPs from a matrix of SNP betas}
 \usage{
-plotSNPcalls(x, rotate = FALSE, ...)
+plotSNPcalls(x, rotate = FALSE, qc = FALSE, ...)
 }
 \arguments{
 \item{x}{an object with SNPs in its metadata(), or a SNP matrix}
 
 \item{rotate}{rotate the subjects onto the side? (FALSE)}
+
+\item{qc}{QC on the SNPs? (implies rotate) (FALSE)}
 
 \item{...}{other arguments passed on to Heatmap}
 }
@@ -17,5 +19,5 @@ plotSNPcalls(x, rotate = FALSE, ...)
 plot SNPs living in metadata(x)$SNPs, provided they match sampleNames(x)
 }
 \details{
-The plotting itself is done by .plotSNPcallmat()
+Plotting is done by .plotSNPcallmat() and .plotSNPheat()
 }

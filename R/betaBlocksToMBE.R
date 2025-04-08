@@ -15,8 +15,10 @@
 betaBlocksToMBE <- function(tbx, n=-1, g="hg19") {
   if (!is(tbx, "TabixFile")) tbx <- TabixFile(tbx)
   x <- readBetaBlocks(tbx, n=n, g=g)
-  MBE <- MethylationExperiment(assay=list(Beta=x), 
-                               rowRanges=attr(x, "GRanges"), 
+  gr <- attr(x, "GRanges")
+  attr(x, "GRanges") <- NULL # no need to duplicate it
+  start(gr) <- start(gr) + 1 # quirk from beta_to_table
+  MBE <- MethylationExperiment(assay=list(Beta=x), rowRanges=gr, 
                                colData=DataFrame(ID=colnames(x)),
                                metadata=list(sourceFile=tbx$path))
   class(MBE) <- "MethBlockExperiment"
