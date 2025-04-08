@@ -2,21 +2,25 @@
 % Please edit documentation in R/SNPcalls.R
 \name{SNPcalls}
 \alias{SNPcalls}
-\title{fit a 1-to-3-component mixture model to flogit(SNPbetas) for each sample}
+\title{fit a mixture model to flogit(SNPbetas) for each sample}
 \usage{
-SNPcalls(SNPs)
+SNPcalls(SNPs, BPPARAM = NULL, ...)
 }
 \arguments{
 \item{SNPs}{a SummarizedExperiment or a matrix of SNP beta values}
+
+\item{BPPARAM}{a BiocParallelParam() object, or (default) SerialParam()}
 }
 \value{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{     0/1/2 calls for each SNP in each sample
 }\if{html}{\out{</div>}}
 }
 \description{
-fit a 1-to-3-component mixture model to flogit(SNPbetas) for each sample
+fit a mixture model to flogit(SNPbetas) for each sample
 }
 \details{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{    mixR::mixfit(flogit(x), ncomp=1:3) is run for each sample. 
+             if the mixture fit fails, non-NA loci will be called as 0.
+             Inexplicably, the default SerialParam() is usually fastest.
 }\if{html}{\out{</div>}}
 }

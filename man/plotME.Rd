@@ -4,7 +4,15 @@
 \alias{plotME}
 \title{plotME}
 \usage{
-plotME(x, k = 100, minmean = 0.2, maxmean = 0.8, maxNA = 0.2, ...)
+plotME(
+  x,
+  k = 100,
+  minmean = 0.2,
+  maxmean = 0.8,
+  maxNA = 0.2,
+  BPPARAM = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{a MethylationExperiment or MethBlockExperiment}
@@ -16,6 +24,8 @@ plotME(x, k = 100, minmean = 0.2, maxmean = 0.8, maxNA = 0.2, ...)
 \item{maxmean}{maximum mean for byExtremality (0.8)}
 
 \item{maxNA}{maximum fraction NA for a feature (0.2)}
+
+\item{BPPARAM}{BiocParallelParam() to pass to plotSNPcalls (SerialParam())}
 
 \item{...}{parameters to pass to Heatmap}
 }
@@ -29,4 +39,7 @@ is returned. This function is purely for a convenient first pass.
 Recent experiences with low-coverage WGBS have convinced us that
 bounding minimum and maximum mean is important for byExtremality.
 If SNPs cannot be found, only the main methylation plot is returned.
+For reasons not yet clear, it's usually best to leave BPPARAM alone.
+For reasons quite clear, caching SNP calls is a very good idea, via
+metadata(x)$SNPcalls <- SNPcalls(x) # will speed up things A LOT
 }
