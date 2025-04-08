@@ -27,7 +27,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, ...) {
   }
   SNPcalls <- SNPcalls(SNPs)
   if (rotate) SNPcalls <- t(SNPcalls)
-  .plotSNPcallmat(SNPcalls, qc=qc...) 
+  .plotSNPcallmat(SNPcalls, qc=qc, ...) 
 
 }
 
