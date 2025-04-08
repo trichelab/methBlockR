@@ -37,7 +37,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, ...) {
 
   toUse <- which(missingness(SNPs_called, 1) < .5)
   if (qc) { 
-    callRanges <- apply(colRanges(SNPs_called, na.rm=TRUE), 1, diff)
+    callRanges <- apply(rowRanges(SNPs_called, na.rm=TRUE), 1, diff)
     qcColor <- c(fail="darkred", note="orange", pass="green")
     qcName <- c("fail", "note", "pass")
     qcRes <- factor(qcName[callRanges + 1])
