@@ -58,7 +58,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, ...) {
     attr(calls, "qcColors") <- qcCol
     if (any(qcRes != "pass")) {
       flag <- which(qcRes != "pass")
-      flagged_gp <- gpar(fontsize = 40 / log2(length(flag)))
+      flagged_gp <- gpar(fontsize = min(12, 40 / log2(length(flag))))
       flagged <- paste(names(qcRes)[flag], qcRes[flag], sep=": ")
       qcAnno <- rowAnnotation(qc = qcRes, 
                               link = anno_mark(at = flag, 
@@ -92,10 +92,10 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, ...) {
           name="Alleles",
           clustering_method_columns='ward.D2', 
           clustering_distance_columns='manhattan', 
-          column_names_gp = gpar(fontsize = 40 / log2(ncol(calls))),
+          column_names_gp = gpar(fontsize = min(9, 40 / log2(ncol(calls)))),
           clustering_method_rows='ward.D2', 
           clustering_distance_rows='manhattan',
-          row_names_gp = gpar(fontsize = 60 / log2(nrow(calls))),
+          row_names_gp = gpar(fontsize = min(9, 60 / log2(nrow(calls)))),
           col=colorRamp2(seq(0, 2), c("#00007F", "yellow", "#7F0000")),
           ...)
 
