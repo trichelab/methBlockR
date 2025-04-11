@@ -150,3 +150,49 @@ setMethod("show", "MethBlockExperiment",
     callNextMethod()
     cat("genome:", unique(genome(object)), "\n")
   })
+
+
+#' @export
+#' @importMethodsFrom SummarizedExperiment colnames
+#' 
+setReplaceMethod("colnames", "MethylationExperiment", 
+  function(x, value) {
+    for (i in c("SNPs", "SNPcalls")) { 
+      if (i %in% names(metadata(x))) {
+        if (ncol(metadata(x)[[i]]) == ncol(x)) {
+          message("Updating metadata(<", class(x), ">)$", i, " to match")
+          colnames(metadata(x)[[i]]) <- value
+        } else { 
+          warning("dim(metadata(<",class(x),">)$",i,") != dim( is out of sync!")
+        }
+      }
+    }
+    callNextMethod(x=x, value=value)
+  })
+
+
+#' @export
+#' @importMethodsFrom SingleCellExperiment cbind
+#' 
+setMethod("cbind", "MethylationExperiment", 
+  function(..., deparse.level = 1) {
+    res <- callNextMethod(...)
+    mdn <- names(metadata(res))
+    tbl <- table(mdn) 
+    if ("SNPs" %in% names(tbl)) { 
+      SNPs <- do.call(cbind, metadata(res)[which(mdn == "SNPs")])
+      if (all(colnames(res) %in% colnames(SNPs))) { 
+        metadata(res)[which(mdn == "SNPs")] <- NULL
+        SNPs <- SNPs[, colnames(res)]
+        metadata(res)[["SNPs"]] <- SNPs 
+        if ("SNPcalls" %in% names(tbl)) { 
+          metadata(res)[which(mdn == "SNPcalls")] <- NULL
+          message("Recalling SNPs for the merged dataset.") 
+          metadata(res)[["SNPcalls"]] <- SNPcalls(res)
+        }
+      } else {
+        message("Missing columns in metadata(<",class(res),">)$SNPs; skipped")
+      }
+    }
+    res
+  })
