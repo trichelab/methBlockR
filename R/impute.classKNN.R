@@ -20,7 +20,7 @@ impute.classKNN <- function(X, INDEX, ...) {
   }
 
   tbl <- table(INDEX) 
-  k <- max(1, as.integer(tbl) - 1)
+  k <- pmax(1, as.integer(tbl) - 1)
   names(k) <- names(tbl) 
   assay(X, "Imputed", withDim=FALSE) <- .imputeByClass(X, INDEX, k)
   return(X) 
