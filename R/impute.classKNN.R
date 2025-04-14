@@ -39,7 +39,7 @@ impute.classKNN <- function(x, col, NAs=.5, maxK=99, BPPARAM=NULL, ...){
 .imputeWithin <- function(x, NAs=0.5, maxK=99, ...) {
 
   k <- pmin(maxK, pmax(1, round(ncol(x)/2)))
-  rr <- which(missingness(x, 1, "ImputedBeta") <= maxNA)
+  rr <- which(missingness(x, 1, "ImputedBeta") <= NAs)
   x[rr, ] <- fexpit(suppressMessages(impute.knn(flogit(x[rr, ]))$data))
   return(x)
 
