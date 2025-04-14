@@ -4,17 +4,17 @@
 \alias{impute.classKNN}
 \title{impute missing sites via k-NN with user-defined classes for comparables}
 \usage{
-impute.classKNN(X, INDEX, ...)
+impute.classKNN(x, col, ...)
 }
 \arguments{
-\item{X}{a MethylationExperiment (or something with getBeta)}
+\item{x}{a MethylationExperiment (or something with getBeta)}
 
-\item{INDEX}{a factor representing the class of each observation}
+\item{col}{a factor with the class of each column, or its name in colData}
 
 \item{...}{other arguments to pass along to impute::impute.knn}
 }
 \value{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{   x, but with a new assay Imputed that has been imputed.
+\if{html}{\out{<div class="sourceCode">}}\preformatted{   x, but with a new assay named ImputedBeta 
 }\if{html}{\out{</div>}}
 }
 \description{
