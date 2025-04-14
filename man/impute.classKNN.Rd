@@ -4,12 +4,14 @@
 \alias{impute.classKNN}
 \title{impute missing sites via k-NN with user-defined classes for comparables}
 \usage{
-impute.classKNN(x, col, ...)
+impute.classKNN(x, col, maxNA = 0.33, ...)
 }
 \arguments{
 \item{x}{a MethylationExperiment (or something with getBeta)}
 
 \item{col}{a factor with the class of each column, or its name in colData}
+
+\item{maxNA}{maximum row NA fraction (0 to 1) allowed within a class (0.33)}
 
 \item{...}{other arguments to pass along to impute::impute.knn}
 }
@@ -21,7 +23,8 @@ impute.classKNN(x, col, ...)
 impute missing sites via k-NN with user-defined classes for comparables
 }
 \details{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{  in principle, this can be combined with impute.GimmeCpG
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  in principle, this could be combined with impute.GimmeCpG
+           in practice, can iterate this with coarsening 'col' factors
 }\if{html}{\out{</div>}}
 }
 \seealso{
