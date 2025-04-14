@@ -34,14 +34,3 @@ MethBlockExperiment <- function(x, ...) {
   y
 
 }
-
-
-#' @rdname  MethBlockExperiment
-#'
-#' @importMethodsFrom GenomeInfoDb "genome<-"
-#'
-#' @export 
-#'
-setReplaceMethod("genome", "MethBlockExperiment", 
-  function(x, value) stop("Use switchMethBlocksGenome() to switch genomes!")
-)

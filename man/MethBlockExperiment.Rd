@@ -2,12 +2,9 @@
 % Please edit documentation in R/MethBlockExperiment.R
 \name{MethBlockExperiment}
 \alias{MethBlockExperiment}
-\alias{genome<-,MethBlockExperiment-method}
 \title{The MethBlockExperiment class (inherits from ME, which inherits from SCE).}
 \usage{
 MethBlockExperiment(x, ...)
-
-\S4method{genome}{MethBlockExperiment}(x) <- value
 }
 \arguments{
 \item{x}{a MethylationExperiment}

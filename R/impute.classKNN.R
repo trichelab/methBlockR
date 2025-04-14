@@ -2,7 +2,9 @@
 #'
 #' @param x       a MethylationExperiment (or something with getBeta)
 #' @param col     a factor with the class of each column, or its name in colData
-#' @param maxNA   maximum row NA fraction (0 to 1) allowed within a class (0.33)
+#' @param NAs     maximum row NA fraction (0 to 1) allowed within a class (0.5)
+#' @param maxK    maximum K (positive integer) nearest neighbors to use (99)
+#' @param BPPARAM a BiocParallel::MulticoreParam() or similar for processing
 #' @param ...     other arguments to pass along to impute::impute.knn
 #'
 #' @details       in principle, this could be combined with impute.GimmeCpG
@@ -15,34 +17,31 @@
 #' @importFrom    impute impute.knn
 #' 
 #' @export
-impute.classKNN <- function(x, col, maxNA=0.33, ...) { 
+impute.classKNN <- function(x, col, NAs=.5, maxK=99, BPPARAM=NULL, ...){
 
-  if (!is(x, "SummarizedExperiment") | !("Beta" %in% assayNames(x))) { 
-    stop("Could not find beta values to impute")
-  }
+  stopifnot(is(x, "SummarizedExperiment") & ("Beta" %in% assayNames(x)))
   if (length(col) != ncol(x)) {
-    if (col %in% names(colData(x))) { 
-      col <- colData(x)[, col]
-    } else {
-      stop("col does not match ncol(x)")
-    }
+    if (col %in% names(colData(x))) col <- colData(x)[, col]
+    else stop("col does not match ncol(x)")
   }
 
-  tbl <- table(col)
-  assay(x, "ImputedBeta") <- getBeta(x)
-  k <- pmin(10, pmax(1, (as.integer(tbl) - 1)))
-  names(k) <- names(tbl) 
-
-  # replace with bplapply?
-  for (i in names(k)) {
-    nn <- k[i]
-    j <- which(col == i)
-    rr <- which(missingness(x[, j], 1, "ImputedBeta") <= maxNA)
-    message("Imputing missing values for class ", i, "...") 
-    assay(x[rr, j], "ImputedBeta") <- 
-      fexpit(impute.knn(flogit(assay(x[rr, j], "ImputedBeta")), k=nn, ...)$data)
-  }
-
+  # Delayed-unfriendly
+  B0 <- lapply(split(t(getBeta(x)), col), t)
+  if (is.null(BPPARAM)) BPPARAM <- SerialParam(progressbar=TRUE)
+  B <- bplapply(B0, .imputeWithin, NAs=NAs, maxK=maxK, BPPARAM=BPPARAM, ...)
+  assay(x, withDimnames=FALSE, "ImputedBeta") <- do.call(cbind, B)[,colnames(x)]
   return(x)
 
 }
+
+
+# helper fn
+.imputeWithin <- function(x, NAs=0.5, maxK=99, ...) {
+
+  k <- pmin(maxK, pmax(1, round(ncol(x)/2)))
+  rr <- which(missingness(x, 1, "ImputedBeta") <= maxNA)
+  x[rr, ] <- fexpit(suppressMessages(impute.knn(flogit(x[rr, ]))$data))
+  return(x)
+
+}
+
