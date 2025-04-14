@@ -1,6 +1,6 @@
 Package: methBlockR
 Title: cook methylation data down to regulatory blocks for distribution & reuse
-Version: 0.9.22
+Version: 0.9.23
 Authors@R: person("Tim","Triche", 
                   email = "trichelab@gmail.com", 
                   role = c("aut","cre"),
@@ -22,14 +22,20 @@ Depends:     SingleCellExperiment,
              ComplexHeatmap,
              sesame,
              iSEE
-Imports:     GenomicRanges,
+Imports:     SummarizedExperiment,
+             GenomicRanges,
              BiocParallel,
-             SummarizedExperiment,
              matrixStats,
              circlize,
+             RSpectra,
              methods,
+             RcppML,
+             uwot,
              mixR
-Suggests:    CNVRanger,
+Suggests:    CytoSimplex,
+             CytoMethIC,
+             fastTopics,
+             CNVRanger,
              CNVfilteR,
              conumee2
 License: MIT
