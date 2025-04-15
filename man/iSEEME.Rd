@@ -4,10 +4,12 @@
 \alias{iSEEME}
 \title{convenience wrapper for iSEE on a MethylationExperiment}
 \usage{
-iSEEME(x)
+iSEEME(x, colorColumn = "cell.type")
 }
 \arguments{
 \item{x}{a MethylationExperiment with NMF and UMAP reducedDims}
+
+\item{colorColumn}{name of the colData column to color plots ("cell.type")}
 }
 \description{
 Note that this is a quick and dirty affair so don't expect much.

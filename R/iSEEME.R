@@ -2,7 +2,8 @@
 #'
 #' Note that this is a quick and dirty affair so don't expect much. 
 #'
-#' @param   x   a MethylationExperiment with NMF and UMAP reducedDims
+#' @param x             a MethylationExperiment with NMF and UMAP reducedDims
+#' @param colorColumn   name of the colData column to color plots ("cell.type")
 #'
 #' @details presumes NMF and UMAP. you will almost certainly want to tweak this.
 #'
@@ -10,10 +11,11 @@
 #'
 #' @export
 #'
-iSEEME <- function(x) { 
+iSEEME <- function(x, colorColumn = "cell.type") { 
 
   # reason for this will become obvious 
   stopifnot(all(c("UMAP","NMF") %in% reducedDimNames(x)))
+  if (!colorColumn %in% names(colData(x))) colorColumn <- "subtype"
 
   iSEE(x,
      initial = 
@@ -22,23 +24,21 @@ iSEEME <- function(x) {
                        PointSize = 4,
                        VisualBoxOpen = TRUE,
                        ColorBy = "Column data",
-                       ColorByColumnData = "subtype", 
-                       TooltipColumnData = c("Pheno"),
+                       ColorByColumnData = colorColumn,
                        Type = "UMAP"
                        ),
             NMF  = new("ColumnDataPlot",
                        YAxis = "nmf1",
                        XAxis = "Column data",
-                       XAxisColumnData = "subtype",
+                       XAxisColumnData = colorColumn,
                        FontSize = 1.5,
                        PointSize = 4,
                        DataBoxOpen = TRUE,
                        SelectionBoxOpen = TRUE,
                        ColorBy = "Column data",
-                       ColorByColumnData = "subtype",
+                       ColorByColumnData = colorColumn,
                        ColumnSelectionDynamicSource = TRUE,
-                       ColumnSelectionSource = "ReducedDimensionPlot1",
-                       TooltipColumnData = c("Pheno")
+                       ColumnSelectionSource = "ReducedDimensionPlot1"
                        ),
             Item = new("ColumnDataTable",
                        SelectionBoxOpen = TRUE,

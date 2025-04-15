@@ -7,8 +7,9 @@
 #' @param minmean   minimum mean for byExtremality (0.2)
 #' @param maxmean   maximum mean for byExtremality (0.8)
 #' @param maxNA     maximum fraction NA for a feature (0.2) 
-#' @param BPPARAM   BiocParallelParam() to pass to plotSNPcalls (SerialParam())
+#' @param splitBy   a column name on which to split rows (NULL)
 #' @param ...       parameters to pass to Heatmap
+#' @param BPPARAM   BiocParallelParam() to pass to plotSNPcalls (SerialParam())
 #'
 #' @details byExtremality() is called to determine features. A joint plot
 #'          of highly variable features on the left and SNPs on the right
@@ -26,7 +27,7 @@
 #'
 #' @export
 #' 
-plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, BPPARAM=NULL, ...) {
+plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, ..., BPPARAM=NULL) {
 
     chr <- intersect(seqlevels(x), paste0("chr", 1:22))
     b <- assay(keepSeqlevels(x, chr, pruning.mode="coarse"), "Beta")
@@ -35,23 +36,11 @@ plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, BPPARAM=NULL, 
     keepFeats <- rownames(b)[which(rowSums(is.na(b)) / N <= maxNA)]
     toPlot <- byExtremality(b[keepFeats,], k, minmean=minmean, maxmean=maxmean)
     message("Plotting DNA methylation...")
-    row_lab_size <- 80 / log2(nrow(x))
-    col_lab_size <- 60 / log2(ncol(x))
-    jet <- colorRamp2(seq(0, 1, 0.125),
-                      c("#00007F", "blue", "#007FFF", "cyan",
-                        "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
-    H1 <- Heatmap(as(t(toPlot), "matrix"), col=jet, name="Methylation", 
-                  clustering_distance_columns="manhattan",
-                  clustering_method_columns="ward.D2",
-                  clustering_distance_rows="manhattan",
-                  clustering_method_rows="ward.D2",
-                  show_parent_dend_line = FALSE,
-                  column_names_gp = gpar(fontsize = col_lab_size),
-                  row_names_gp = gpar(fontsize = row_lab_size),
-                  row_names_side="left",
-                  row_title_rot = 0,
-                  row_gap = unit(1.5, "mm"),
-                  ...)
+    if (!is.null(splitBy)) { 
+      H1 <- .plotMethSplit(toPlot, row_split = colData(x)[, splitBy], ...)
+    } else {
+      H1 <- .plotMethSplit(toPlot, ...)
+    }
     if ("SNPs" %in% names(metadata(x))) { 
       if (is.null(BPPARAM)) BPPARAM <- SerialParam(progressbar = TRUE)
       message("Calling and plotting SNPs...")
@@ -72,4 +61,27 @@ plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, BPPARAM=NULL, 
       draw(H1)
     }
 
+}
+
+
+# helper fn
+.plotMethSplit <- function(toPlot, ...) { 
+    
+  row_lab_size <- min(9, (60 / log2(nrow(toPlot))))
+  col_lab_size <- min(9, (60 / log2(ncol(toPlot))))
+  jet <- colorRamp2(seq(0, 1, 0.125),
+                    c("#00007F", "blue", "#007FFF", "cyan",
+                      "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
+  Heatmap(as(t(toPlot), "matrix"), col=jet, name="Methylation", 
+          clustering_distance_columns="manhattan",
+          clustering_method_columns="ward.D2",
+          clustering_distance_rows="manhattan",
+          clustering_method_rows="ward.D2",
+          show_parent_dend_line = FALSE,
+          column_names_gp = gpar(fontsize = col_lab_size),
+          row_names_gp = gpar(fontsize = row_lab_size),
+          row_names_side="left",
+          row_title_rot = 0,
+          row_gap = unit(1, "mm"),
+          ...)
 }

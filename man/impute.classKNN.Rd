@@ -4,23 +4,21 @@
 \alias{impute.classKNN}
 \title{impute missing sites via k-NN with user-defined classes for comparables}
 \usage{
-impute.classKNN(x, col, NAs = 0.5, maxK = 99, BPPARAM = NULL, ...)
+impute.classKNN(x, col, maxK = 10, BPPARAM = NULL, ...)
 }
 \arguments{
 \item{x}{a MethylationExperiment (or something with getBeta)}
 
 \item{col}{a factor with the class of each column, or its name in colData}
 
-\item{NAs}{maximum row NA fraction (0 to 1) allowed within a class (0.5)}
-
-\item{maxK}{maximum K (positive integer) nearest neighbors to use (99)}
+\item{maxK}{maximum K (positive integer) nearest neighbors to use (10)}
 
 \item{BPPARAM}{a BiocParallel::MulticoreParam() or similar for processing}
 
 \item{...}{other arguments to pass along to impute::impute.knn}
 }
 \value{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{   x, but with a new assay named ImputedBeta 
+\if{html}{\out{<div class="sourceCode">}}\preformatted{   x, but with an assay named RawBetas holding the originals
 }\if{html}{\out{</div>}}
 }
 \description{

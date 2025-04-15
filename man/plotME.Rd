@@ -10,8 +10,9 @@ plotME(
   minmean = 0.2,
   maxmean = 0.8,
   maxNA = 0.2,
-  BPPARAM = NULL,
-  ...
+  splitBy = NULL,
+  ...,
+  BPPARAM = NULL
 )
 }
 \arguments{
@@ -25,9 +26,11 @@ plotME(
 
 \item{maxNA}{maximum fraction NA for a feature (0.2)}
 
-\item{BPPARAM}{BiocParallelParam() to pass to plotSNPcalls (SerialParam())}
+\item{splitBy}{a column name on which to split rows (NULL)}
 
 \item{...}{parameters to pass to Heatmap}
+
+\item{BPPARAM}{BiocParallelParam() to pass to plotSNPcalls (SerialParam())}
 }
 \description{
 plot a MethylationExperiment or MethBlockExperiment features + SNPs
