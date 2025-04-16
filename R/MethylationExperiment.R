@@ -10,8 +10,6 @@
 #'
 #' @seealso     openSesameToME
 #'
-#' @importFrom  GenomicRanges         GRangesList
-#' @importFrom  RaggedExperiment      RaggedExperiment
 #' @importFrom  SingleCellExperiment  SingleCellExperiment
 #'
 #' @import      methods

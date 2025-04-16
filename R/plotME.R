@@ -8,18 +8,14 @@
 #' @param maxmean   maximum mean for byExtremality (0.8)
 #' @param maxNA     maximum fraction NA for a feature (0.2) 
 #' @param splitBy   a column name on which to split rows (NULL)
+#' @param rankBy    'extremality' or 'sd' (extremality)
 #' @param ...       parameters to pass to Heatmap
 #' @param BPPARAM   BiocParallelParam() to pass to plotSNPcalls (SerialParam())
 #'
-#' @details byExtremality() is called to determine features. A joint plot
-#'          of highly variable features on the left and SNPs on the right
-#'          is returned. This function is purely for a convenient first pass.
-#'          Recent experiences with low-coverage WGBS have convinced us that
-#'          bounding minimum and maximum mean is important for byExtremality.
-#'          If SNPs cannot be found, only the main methylation plot is returned.
+#' @details If SNPs cannot be found, only the main methylation plot is returned.
 #'          For reasons not yet clear, it's usually best to leave BPPARAM alone.
 #'          For reasons quite clear, caching SNP calls is a very good idea, via
-#'          metadata(x)$SNPcalls <- SNPcalls(x) # will speed up things A LOT
+#'          metadata(x)$SNPcalls <- SNPcalls(x), and will speed up things A LOT
 #'
 #' @import ComplexHeatmap
 #' @import BiocParallel
@@ -27,14 +23,21 @@
 #'
 #' @export
 #' 
-plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, ..., BPPARAM=NULL) {
+plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, rankBy=c("extremality", "sd"), ..., BPPARAM=NULL) {
 
+    N <- ncol(x)
+    rankBy <- match.arg(tolower(rankBy))
     chr <- intersect(seqlevels(x), paste0("chr", 1:22))
     b <- assay(keepSeqlevels(x, chr, pruning.mode="coarse"), "Beta")
-    message("Finding extremal features...")
-    N <- ncol(x)
-    keepFeats <- rownames(b)[which(rowSums(is.na(b)) / N <= maxNA)]
-    toPlot <- byExtremality(b[keepFeats,], k, minmean=minmean, maxmean=maxmean)
+    keep <- rownames(b)[which(rowSums(is.na(b)) / N <= maxNA)]
+    description <- c(extremality="extremal", sd="variable")
+    message("Finding ", description[rankBy], " features...")
+
+    toPlot <- 
+      switch(rankBy, 
+             extremality=byExtremality(b[keep,], k, minm=minmean, maxm=maxmean),
+             sd=bySD(b[keep, ], k, minmean=minmean, maxmean=maxmean))
+
     message("Plotting DNA methylation...")
     if (!is.null(splitBy)) { 
       H1 <- .plotMethSplit(toPlot, row_split = colData(x)[, splitBy], ...)

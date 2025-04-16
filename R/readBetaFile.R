@@ -11,6 +11,7 @@
 #'              dictionary for hg19 is 125MB, so we don't have it in data(). 
 #' 
 #' @import      GenomicRanges
+#' @import      rtracklayer
 #'
 #' @export 
 #'

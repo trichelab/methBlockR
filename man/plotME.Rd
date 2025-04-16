@@ -11,6 +11,7 @@ plotME(
   maxmean = 0.8,
   maxNA = 0.2,
   splitBy = NULL,
+  rankBy = c("extremality", "sd"),
   ...,
   BPPARAM = NULL
 )
@@ -28,6 +29,8 @@ plotME(
 
 \item{splitBy}{a column name on which to split rows (NULL)}
 
+\item{rankBy}{'extremality' or 'sd' (extremality)}
+
 \item{...}{parameters to pass to Heatmap}
 
 \item{BPPARAM}{BiocParallelParam() to pass to plotSNPcalls (SerialParam())}
@@ -36,13 +39,8 @@ plotME(
 plot a MethylationExperiment or MethBlockExperiment features + SNPs
 }
 \details{
-byExtremality() is called to determine features. A joint plot
-of highly variable features on the left and SNPs on the right
-is returned. This function is purely for a convenient first pass.
-Recent experiences with low-coverage WGBS have convinced us that
-bounding minimum and maximum mean is important for byExtremality.
 If SNPs cannot be found, only the main methylation plot is returned.
 For reasons not yet clear, it's usually best to leave BPPARAM alone.
 For reasons quite clear, caching SNP calls is a very good idea, via
-metadata(x)$SNPcalls <- SNPcalls(x) # will speed up things A LOT
+metadata(x)$SNPcalls <- SNPcalls(x), and will speed up things A LOT
 }
