@@ -29,7 +29,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal=c("jet","b
   } else { 
     SNPs <- as.matrix(x)
   }
-  pal <- match.arg(tolower(pal))
+  pal <- match.arg(pal)
   if (is.null(BPPARAM)) BPPARAM <- SerialParam(progressbar = TRUE)
   if (is(x, "SummarizedExperiment") & "SNPcalls" %in% names(metadata(x))) { 
     message("Cached SNP calls found in metadata(x)$SNPcalls (yay)")
@@ -56,7 +56,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal=c("jet","b
 # helper fn
 .plotSNPcallmat <- function(calls, qc=FALSE, qcRes=NULL, qcCol=NULL, pal=c("jet", "bw"), ...) {
 
-  pal <- match.arg(tolower(pal))
+  pal <- match.arg(pal)
   if (qc) {
   
     # avoid issues due to t() 
@@ -95,7 +95,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal=c("jet","b
 # helper fn (DRY)
 .plotSNPheat <- function(calls, pal=c("jet","bw"), ...) { 
  
-  pal <- match.arg(tolower(pal))
+  pal <- match.arg(pal)
   col <- switch(pal, 
                 jet=colorRamp2(seq(0, 2), c("#00007F", "yellow", "#7F0000")),
                 bw=colorRamp2(seq(0, 2), c("#FFFFFF", "#888888", "#000000")))

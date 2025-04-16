@@ -27,8 +27,8 @@
 plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, rankBy=c("extremality", "sd"), pal=c("jet", "bw"), ..., BPPARAM=NULL) {
 
     N <- ncol(x)
-    pal <- match.arg(tolower(pal))
-    rankBy <- match.arg(tolower(rankBy))
+    pal <- match.arg(pal)
+    rankBy <- match.arg(rankBy)
     chr <- intersect(seqlevels(x), paste0("chr", 1:22))
     b <- assay(keepSeqlevels(x, chr, pruning.mode="coarse"), "Beta")
     keep <- rownames(b)[which(rowSums(is.na(b)) / N <= maxNA)]
