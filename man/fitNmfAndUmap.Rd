@@ -4,18 +4,21 @@
 \alias{fitNmfAndUmap}
 \title{performs NMF on the beta values, stuffs the factors into colData, runs UMAP}
 \usage{
-fitNmfAndUmap(SCE, k = 20, ...)
+fitNmfAndUmap(SCE, k = 30, ...)
 }
 \arguments{
-\item{SCE}{a SingleCellExperiment (or SummarizedExperiment to coerce to one)}
+\item{k}{number of factors to find (30)}
 
-\item{k}{number of factors to find (20)}
+\item{...}{other arguments to pass to RcppML::nmf}
 
-\item{...}{other arguments to pass to RcppML::nmf_fit}
+\item{x}{a MethBlockExperiment or similar thing-with-Beta-values}
 }
 \value{
 SCE, with new reducedDim()s, colData, nmf_fit & umap_fit metadata
 }
 \description{
 performs NMF on the beta values, stuffs the factors into colData, runs UMAP
+}
+\details{
+the RSpectra import is to avoid a weird umap bug.
 }

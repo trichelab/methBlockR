@@ -6,7 +6,7 @@
 #' @param rotate  rotate the subjects onto the side? (FALSE)
 #' @param qc      QC on the SNPs? (implies rotate) (FALSE)
 #' @param BPPARAM a BiocParallelParam() object, or (default) SerialParam()
-#' @param pal     palette to use ("jet" or "bw") ("jet") 
+#' @param pal     palette to use ("jet" or "grn") ("grn") 
 #' @param ...     other arguments passed on to Heatmap
 #' 
 #' @details Plotting is done by .plotSNPcallmat() and .plotSNPheat()
@@ -17,7 +17,7 @@
 #' @import circlize
 #' 
 #' @export
-plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal=c("jet","bw"), ...) { 
+plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal = c("grn", "jet"), ...) { 
 
   if (is(x, "SummarizedExperiment")) {
     if ("SNPs" %in% names(metadata(x))) {
@@ -54,7 +54,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal=c("jet","b
 
 
 # helper fn
-.plotSNPcallmat <- function(calls, qc=FALSE, qcRes=NULL, qcCol=NULL, pal=c("jet", "bw"), ...) {
+.plotSNPcallmat <- function(calls, qc=FALSE, qcRes=NULL, qcCol=NULL, pal=c("grn", "jet"), ...) {
 
   pal <- match.arg(pal)
   if (qc) {
@@ -93,22 +93,22 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal=c("jet","b
 
 
 # helper fn (DRY)
-.plotSNPheat <- function(calls, pal=c("jet","bw"), ...) { 
+.plotSNPheat <- function(calls, pal=c("jet","grn"), ...) { 
  
   pal <- match.arg(pal)
   col <- switch(pal, 
-                jet=colorRamp2(seq(0, 2), c("#00007F", "yellow", "#7F0000")),
-                bw=colorRamp2(seq(0, 2), c("#FFFFFF", "#888888", "#000000")))
+                jet=colorRamp2(seq(0, 2), c("#00007F", "#FFFF00", "#7F0000")),
+                grn=colorRamp2(seq(0, 2), c("#FFFFFF", "#009900", "#001100")))
 
   Heatmap(calls,
           col=col, 
           name="Alleles",
-          clustering_method_columns='ward.D2', 
-          clustering_distance_columns='manhattan', 
-          column_names_gp = gpar(fontsize = min(9, 40 / log2(ncol(calls)))),
           clustering_method_rows='ward.D2', 
+          clustering_method_columns='ward.D2', 
           clustering_distance_rows='manhattan',
+          clustering_distance_columns='manhattan', 
           row_names_gp = gpar(fontsize = min(9, 60 / log2(nrow(calls)))),
+          column_names_gp = gpar(fontsize = min(9, 40 / log2(ncol(calls)))),
           ...)
 
 }

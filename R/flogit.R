@@ -7,7 +7,6 @@
 #'
 #' @export 
 flogit <- function(p, sqz=0.000001) {
-  p[ which(p < sqz) ] <- sqz 
-  p[ which(p > (1 - sqz)) ] <- (1 - sqz)
+  p <- squeeze(p, sqz=sqz)
   log(p/(1 - p))
 }

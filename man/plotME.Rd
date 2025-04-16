@@ -12,7 +12,7 @@ plotME(
   maxNA = 0.2,
   splitBy = NULL,
   rankBy = c("extremality", "sd"),
-  pal = c("jet", "bw"),
+  pal = c("grn", "jet"),
   ...,
   BPPARAM = NULL
 )
@@ -32,7 +32,7 @@ plotME(
 
 \item{rankBy}{'extremality' or 'sd' (extremality)}
 
-\item{pal}{palette for SNP plot ("jet" or "bw") ("jet")}
+\item{pal}{palette for SNP plot ("grn" or "jet") ("grn")}
 
 \item{...}{parameters to pass to Heatmap}
 

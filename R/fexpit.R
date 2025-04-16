@@ -7,5 +7,5 @@
 #'
 #' @export 
 fexpit <- function(x, sqz=1e-6) {
-  (((((exp(x)/(1+exp(x))) * 2) - 1) / (1-sqz)) + 1) / 2
+  unsqueeze(exp(x)/(1+exp(x)), sqz=sqz)
 }
