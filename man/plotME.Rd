@@ -20,11 +20,11 @@ plotME(
 \arguments{
 \item{x}{a MethylationExperiment or MethBlockExperiment}
 
-\item{k}{how many features to use (100)}
+\item{k}{maximum number of features to use (100)}
 
-\item{minmean}{minimum mean for byExtremality (0.2)}
+\item{minmean}{minimum mean for a row to be included (0.2)}
 
-\item{maxmean}{maximum mean for byExtremality (0.8)}
+\item{maxmean}{maximum mean for a row to be included (0.8)}
 
 \item{maxNA}{maximum fraction NA for a feature (0.2)}
 

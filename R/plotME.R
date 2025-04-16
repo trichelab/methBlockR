@@ -3,9 +3,9 @@
 #' plot a MethylationExperiment or MethBlockExperiment features + SNPs
 #'
 #' @param x         a MethylationExperiment or MethBlockExperiment
-#' @param k         how many features to use (100)
-#' @param minmean   minimum mean for byExtremality (0.2)
-#' @param maxmean   maximum mean for byExtremality (0.8)
+#' @param k         maximum number of features to use (100)
+#' @param minmean   minimum mean for a row to be included (0.2)
+#' @param maxmean   maximum mean for a row to be included (0.8)
 #' @param maxNA     maximum fraction NA for a feature (0.2) 
 #' @param splitBy   a column name on which to split rows (NULL)
 #' @param rankBy    'extremality' or 'sd' (extremality)
@@ -31,14 +31,13 @@ plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, 
     rankBy <- match.arg(rankBy)
     chr <- intersect(seqlevels(x), paste0("chr", 1:22))
     b <- assay(keepSeqlevels(x, chr, pruning.mode="coarse"), "Beta")
-    keep <- rownames(b)[which(rowSums(is.na(b)) / N <= maxNA)]
+    b <- b[which(rowSums(is.na(b)) / N <= maxNA), ]
     description <- c(extremality="extremal", sd="variable")
-    message("Finding ", description[rankBy], " features...")
 
-    toPlot <- 
-      switch(rankBy, 
-             extremality=byExtremality(b[keep,], k, minm=minmean, maxm=maxmean),
-             sd=bySD(b[keep, ], k, minmean=minmean, maxmean=maxmean))
+    message("Finding top ", k, " most ", description[rankBy], " features...")
+    toPlot <-switch(rankBy, 
+                    sd=bySD(b, k=k, min=minmean, max=maxmean),
+                    extremality=byExtremality(b, k=k, min=minmean, max=maxmean))
 
     message("Plotting DNA methylation...")
     if (!is.null(splitBy)) { 
@@ -73,21 +72,22 @@ plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, 
 # helper fn
 .plotMethSplit <- function(toPlot, ...) { 
     
-  row_lab_size <- min(9, (60 / log2(nrow(toPlot))))
-  col_lab_size <- min(9, (60 / log2(ncol(toPlot))))
   jet <- colorRamp2(seq(0, 1, 0.125),
-                    c("#00007F", "blue", "#007FFF", "cyan",
-                      "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
+                    c("#00007F", "blue", "#007FFF", 
+                      "cyan", "#7FFF7F", "yellow", 
+                      "#FF7F00", "red", "#7F0000"))
+  row_size <- min(9, (60 / log2(nrow(toPlot))))
+  col_size <- min(9, (60 / log2(ncol(toPlot))))
   Heatmap(as(t(toPlot), "matrix"), col=jet, name="Methylation", 
+          column_names_gp = gpar(fontsize = col_size),
+          row_names_gp = gpar(fontsize = row_size),
           clustering_distance_columns="manhattan",
           clustering_method_columns="ward.D2",
           clustering_distance_rows="manhattan",
           clustering_method_rows="ward.D2",
           show_parent_dend_line = FALSE,
-          column_names_gp = gpar(fontsize = col_lab_size),
-          row_names_gp = gpar(fontsize = row_lab_size),
+          row_gap = unit(1, "mm"),
           row_names_side="left",
           row_title_rot = 0,
-          row_gap = unit(1, "mm"),
           ...)
 }

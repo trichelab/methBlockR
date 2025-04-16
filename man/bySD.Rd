@@ -4,19 +4,19 @@
 \alias{bySD}
 \title{bySD}
 \usage{
-bySD(x, k = 500, minmean = -Inf, maxmean = Inf)
+bySD(x, k = 100, minmean = 0.025, maxmean = 0.975)
 }
 \arguments{
 \item{x}{a numeric matrix, possibly with NAs}
 
-\item{k}{how many rows to return (500)}
+\item{k}{maximum number of rows to return (100)}
 
-\item{minmean}{minimum mean value (-Inf)}
+\item{minmean}{minimum mean value (0.025)}
 
-\item{maxmean}{maximum mean value (+Inf)}
+\item{maxmean}{maximum mean value (0.975)}
 }
 \value{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{   the most variable _k_ rows of _x_ (with suitable means)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{   the most variable rows of x (with suitable means)
 }\if{html}{\out{</div>}}
 }
 \description{

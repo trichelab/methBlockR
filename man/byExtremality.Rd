@@ -4,16 +4,16 @@
 \alias{byExtremality}
 \title{byExtremality}
 \usage{
-byExtremality(x, k = 500, minmean = 0.05, maxmean = 0.95)
+byExtremality(x, k = 100, minmean = 0.025, maxmean = 0.975)
 }
 \arguments{
 \item{x}{a matrix of beta values (proportions), by block or by locus}
 
-\item{k}{how many rows to return (500)}
+\item{k}{how many rows to return (100)}
 
-\item{minmean}{minimum mean for byExtremality (0.05)}
+\item{minmean}{minimum row mean (0.05)}
 
-\item{maxmean}{maximum mean for byExtremality (0.95)}
+\item{maxmean}{maximum row mean (0.95)}
 }
 \value{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{   the most extremal _k_ rows of _x_ (with suitable means)
@@ -33,6 +33,6 @@ extremality(X_j) = sd(X_j) / bernoulliSD(mean(X_j))
 
 This function selects the k most extremal rows of x and returns their values.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{  it turns out that you usually want 0.95 > mean > 0.05
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  it turns out that you usually want 0.975 >= mean >= 0.025
 }\if{html}{\out{</div>}}
 }

@@ -12,31 +12,34 @@
 #'
 #' This function selects the k most extremal rows of x and returns their values.
 #'
-#' @param     x   a matrix of beta values (proportions), by block or by locus
-#' @param     k   how many rows to return (500)
-#' @param minmean minimum mean for byExtremality (0.05)
-#' @param maxmean maximum mean for byExtremality (0.95)
+#' @param x       a matrix of beta values (proportions), by block or by locus
+#' @param k       how many rows to return (100)
+#' @param minmean minimum row mean (0.05)
+#' @param maxmean maximum row mean (0.95)
 #'
 #' @return        the most extremal _k_ rows of _x_ (with suitable means)
 #' 
-#' @details       it turns out that you usually want 0.95 > mean > 0.05
+#' @details       it turns out that you usually want 0.975 >= mean >= 0.025
 #'
 #' @importFrom    matrixStats rowMeans2 rowSds
 #' 
 #' @export
-byExtremality <- function(x, k=500, minmean=0.05, maxmean=0.95) {
+byExtremality <- function(x, k=100, minmean=0.025, maxmean=0.975) {
+
+  x <- filterByMean(x, min=minmean, max=maxmean)
+  xe <- .extremality(x)
   k <- min(nrow(x), k)
-  extremality <- .extremality(x, minmean=minmean, maxmean=maxmean)
-  x[rev(order(extremality))[seq_len(k)], ]
+  x[rev(order(xe))[seq_len(k)], ]
+
 }
 
+
 # helper fn; now bounded
-.extremality <- function(x, minmean=0.05, maxmean=0.95) {
+.extremality <- function(x) {
+
   means <- rowMeans2(x, na.rm=TRUE)
   bernoulliSd <- sqrt(means * (1 - means))
   actualSd <- rowSds(x, na.rm=TRUE)
-  res <- pmin(1, actualSd / bernoulliSd)
-  res[which(means < minmean)] <- 0 
-  res[which(means > maxmean)] <- 0 
-  return(res) 
+  pmin(1, actualSd / bernoulliSd)
+
 }
