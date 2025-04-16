@@ -6,6 +6,7 @@
 #' @param rotate  rotate the subjects onto the side? (FALSE)
 #' @param qc      QC on the SNPs? (implies rotate) (FALSE)
 #' @param BPPARAM a BiocParallelParam() object, or (default) SerialParam()
+#' @param pal     palette to use ("jet" or "bw") ("jet") 
 #' @param ...     other arguments passed on to Heatmap
 #' 
 #' @details Plotting is done by .plotSNPcallmat() and .plotSNPheat()
@@ -16,7 +17,7 @@
 #' @import circlize
 #' 
 #' @export
-plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, ...) { 
+plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal=c("jet","bw"), ...) { 
 
   if (is(x, "SummarizedExperiment")) {
     if ("SNPs" %in% names(metadata(x))) {
@@ -28,6 +29,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, ...) {
   } else { 
     SNPs <- as.matrix(x)
   }
+  pal <- match.arg(tolower(pal))
   if (is.null(BPPARAM)) BPPARAM <- SerialParam(progressbar = TRUE)
   if (is(x, "SummarizedExperiment") & "SNPcalls" %in% names(metadata(x))) { 
     message("Cached SNP calls found in metadata(x)$SNPcalls (yay)")
@@ -42,15 +44,19 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, ...) {
     qcCol <- attr(calls, "qcColors")
   }
   calls <- calls[which(missingness(calls, 1) < .5), ]
-  if (rotate | qc) .plotSNPcallmat(t(calls), qc=qc,qcRes=qcRes,qcCol=qcCol,...) 
-  else .plotSNPcallmat(calls, ...) 
+  if (rotate | qc) {
+    .plotSNPcallmat(t(calls), qc=qc, qcRes=qcRes, qcCol=qcCol, pal=pal, ...) 
+  } else {
+    .plotSNPcallmat(calls, pal=pal, ...)
+  }
 
 }
 
 
 # helper fn
-.plotSNPcallmat <- function(calls, qc=FALSE, qcRes=NULL, qcCol=NULL, ...) {
+.plotSNPcallmat <- function(calls, qc=FALSE, qcRes=NULL, qcCol=NULL, pal=c("jet", "bw"), ...) {
 
+  pal <- match.arg(tolower(pal))
   if (qc) {
   
     # avoid issues due to t() 
@@ -73,22 +79,29 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, ...) {
                    right_annotation = qcAnno,
                    show_row_names = FALSE, 
                    row_title_rot = 0,
+                   pal = pal, 
                    ...)
     } else { 
       qcAnno <- rowAnnotation(qc = qcRes, col = list(qc = qcCol))
-      .plotSNPheat(calls, right_annotation = qcAnno, ...)
+      .plotSNPheat(calls, right_annotation = qcAnno, pal = pal, ...)
     }
   } else { 
-    .plotSNPheat(calls, ...)
+    .plotSNPheat(calls, pal = pal, ...)
   }
 
 }
 
 
 # helper fn (DRY)
-.plotSNPheat <- function(calls, ...) { 
-  
+.plotSNPheat <- function(calls, pal=c("jet","bw"), ...) { 
+ 
+  pal <- match.arg(tolower(pal))
+  col <- switch(pal, 
+                jet=colorRamp2(seq(0, 2), c("#00007F", "yellow", "#7F0000")),
+                bw=colorRamp2(seq(0, 2), c("#FFFFFF", "#888888", "#000000")))
+
   Heatmap(calls,
+          col=col, 
           name="Alleles",
           clustering_method_columns='ward.D2', 
           clustering_distance_columns='manhattan', 
@@ -96,7 +109,6 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, ...) {
           clustering_method_rows='ward.D2', 
           clustering_distance_rows='manhattan',
           row_names_gp = gpar(fontsize = min(9, 60 / log2(nrow(calls)))),
-          col=colorRamp2(seq(0, 2), c("#00007F", "yellow", "#7F0000")),
           ...)
 
 }

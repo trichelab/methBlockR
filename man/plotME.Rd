@@ -12,6 +12,7 @@ plotME(
   maxNA = 0.2,
   splitBy = NULL,
   rankBy = c("extremality", "sd"),
+  pal = c("jet", "bw"),
   ...,
   BPPARAM = NULL
 )
@@ -30,6 +31,8 @@ plotME(
 \item{splitBy}{a column name on which to split rows (NULL)}
 
 \item{rankBy}{'extremality' or 'sd' (extremality)}
+
+\item{pal}{palette for SNP plot ("jet" or "bw") ("jet")}
 
 \item{...}{parameters to pass to Heatmap}
 

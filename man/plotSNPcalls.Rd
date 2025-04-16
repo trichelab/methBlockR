@@ -4,7 +4,14 @@
 \alias{plotSNPcalls}
 \title{call and plot SNPs from a matrix of SNP betas}
 \usage{
-plotSNPcalls(x, rotate = FALSE, qc = FALSE, BPPARAM = NULL, ...)
+plotSNPcalls(
+  x,
+  rotate = FALSE,
+  qc = FALSE,
+  BPPARAM = NULL,
+  pal = c("jet", "bw"),
+  ...
+)
 }
 \arguments{
 \item{x}{an object with SNPs in its metadata(), or a SNP matrix}
@@ -14,6 +21,8 @@ plotSNPcalls(x, rotate = FALSE, qc = FALSE, BPPARAM = NULL, ...)
 \item{qc}{QC on the SNPs? (implies rotate) (FALSE)}
 
 \item{BPPARAM}{a BiocParallelParam() object, or (default) SerialParam()}
+
+\item{pal}{palette to use ("jet" or "bw") ("jet")}
 
 \item{...}{other arguments passed on to Heatmap}
 }

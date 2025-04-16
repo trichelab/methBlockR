@@ -9,6 +9,7 @@
 #' @param maxNA     maximum fraction NA for a feature (0.2) 
 #' @param splitBy   a column name on which to split rows (NULL)
 #' @param rankBy    'extremality' or 'sd' (extremality)
+#' @param pal       palette for SNP plot ("jet" or "bw") ("jet") 
 #' @param ...       parameters to pass to Heatmap
 #' @param BPPARAM   BiocParallelParam() to pass to plotSNPcalls (SerialParam())
 #'
@@ -23,9 +24,10 @@
 #'
 #' @export
 #' 
-plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, rankBy=c("extremality", "sd"), ..., BPPARAM=NULL) {
+plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, rankBy=c("extremality", "sd"), pal=c("jet", "bw"), ..., BPPARAM=NULL) {
 
     N <- ncol(x)
+    pal <- match.arg(tolower(pal))
     rankBy <- match.arg(tolower(rankBy))
     chr <- intersect(seqlevels(x), paste0("chr", 1:22))
     b <- assay(keepSeqlevels(x, chr, pruning.mode="coarse"), "Beta")
@@ -49,6 +51,7 @@ plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, 
       message("Calling and plotting SNPs...")
       H2 <- suppressMessages(try(plotSNPcalls(x, 
                                               qc=TRUE,
+                                              pal=pal,
                                               BPPARAM=BPPARAM, 
                                               show_row_dend=FALSE),
                                  silent=TRUE))
