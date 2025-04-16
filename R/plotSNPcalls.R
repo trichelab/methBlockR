@@ -6,7 +6,7 @@
 #' @param rotate  rotate the subjects onto the side? (FALSE)
 #' @param qc      QC on the SNPs? (implies rotate) (FALSE)
 #' @param BPPARAM a BiocParallelParam() object, or (default) SerialParam()
-#' @param pal     palette to use ("jet" or "grn") ("grn") 
+#' @param pal     palette to use ("jet" or "prp") ("prp") 
 #' @param ...     other arguments passed on to Heatmap
 #' 
 #' @details Plotting is done by .plotSNPcallmat() and .plotSNPheat()
@@ -17,7 +17,7 @@
 #' @import circlize
 #' 
 #' @export
-plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal = c("grn", "jet"), ...) { 
+plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal = c("prp", "jet"), ...) { 
 
   if (is(x, "SummarizedExperiment")) {
     if ("SNPs" %in% names(metadata(x))) {
@@ -54,7 +54,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal = c("grn",
 
 
 # helper fn
-.plotSNPcallmat <- function(calls, qc=FALSE, qcRes=NULL, qcCol=NULL, pal=c("grn", "jet"), ...) {
+.plotSNPcallmat <- function(calls, qc=FALSE, qcRes=NULL, qcCol=NULL, pal=c("prp", "jet"), ...) {
 
   pal <- match.arg(pal)
   if (qc) {
@@ -93,12 +93,12 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal = c("grn",
 
 
 # helper fn (DRY)
-.plotSNPheat <- function(calls, pal=c("jet","grn"), ...) { 
+.plotSNPheat <- function(calls, pal=c("jet","prp"), ...) { 
  
   pal <- match.arg(pal)
   col <- switch(pal, 
                 jet=colorRamp2(seq(0, 2), c("#00007F", "#FFFF00", "#7F0000")),
-                grn=colorRamp2(seq(0, 2), c("#FFFFFF", "#009900", "#001100")))
+                prp=colorRamp2(seq(0, 2), c("#FFFFFF", "#990099", "#110011")))
 
   Heatmap(calls,
           col=col, 

@@ -9,7 +9,7 @@ plotSNPcalls(
   rotate = FALSE,
   qc = FALSE,
   BPPARAM = NULL,
-  pal = c("grn", "jet"),
+  pal = c("prp", "jet"),
   ...
 )
 }
@@ -22,7 +22,7 @@ plotSNPcalls(
 
 \item{BPPARAM}{a BiocParallelParam() object, or (default) SerialParam()}
 
-\item{pal}{palette to use ("jet" or "grn") ("grn")}
+\item{pal}{palette to use ("jet" or "prp") ("prp")}
 
 \item{...}{other arguments passed on to Heatmap}
 }

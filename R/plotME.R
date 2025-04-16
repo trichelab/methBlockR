@@ -9,7 +9,7 @@
 #' @param maxNA     maximum fraction NA for a feature (0.2) 
 #' @param splitBy   a column name on which to split rows (NULL)
 #' @param rankBy    'extremality' or 'sd' (extremality)
-#' @param pal       palette for SNP plot ("grn" or "jet") ("grn") 
+#' @param pal       palette for SNP plot ("prp" or "jet") ("prp") 
 #' @param ...       parameters to pass to Heatmap
 #' @param BPPARAM   BiocParallelParam() to pass to plotSNPcalls (SerialParam())
 #'
@@ -24,7 +24,7 @@
 #'
 #' @export
 #' 
-plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, rankBy=c("extremality", "sd"), pal=c("grn", "jet"), ..., BPPARAM=NULL) {
+plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, rankBy=c("extremality", "sd"), pal=c("prp", "jet"), ..., BPPARAM=NULL) {
 
     N <- ncol(x)
     pal <- match.arg(pal)
