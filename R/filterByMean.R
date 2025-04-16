@@ -15,8 +15,9 @@
 #'
 #' @export
 #'
-filterByMean <- function(x, min=0.025, max=0.975, INDEX=c(1,2)) {
+filterByMean <- function(x, min=0.025, max=0.975, INDEX=1) {
 
+  stopifnot(INDEX %in% 1:2)
   means <- switch(INDEX, rowMeans2(x, na.rm=TRUE), colMeans2(x, na.rm=TRUE))
   eligible <- which(means <= maxmean & means >= minmean)
   rows <- ifelse(INDEX == 1, eligible, seq_len(nrow(x)))
