@@ -98,7 +98,7 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal = c("prp",
   pal <- match.arg(pal)
   col <- switch(pal, 
                 jet=colorRamp2(seq(0, 2), c("#00007F", "#FFFF00", "#7F0000")),
-                prp=colorRamp2(seq(0, 2), c("#FFFFFF", "#AA00AA", "#330033")))
+                prp=colorRamp2(seq(0, 2), c("#FFFFFF", "#880088", "#440044")))
 
   Heatmap(calls,
           col=col, 
