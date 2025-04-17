@@ -17,12 +17,9 @@
 #'
 filterByMean <- function(x, min=0.025, max=0.975, INDEX=1L) {
 
-  means <- switch(INDEX, 
-                  rowMeans2(x, na.rm=TRUE), 
-                  colMeans2(x, na.rm=TRUE))
-  eligible <- which(means >= min & means <= max)
-  rows <- ifelse(INDEX == 1, eligible, seq_len(nrow(x)))
-  cols <- ifelse(INDEX == 2, eligible, seq_len(ncol(x)))
+  means <- switch(INDEX, rowMeans2(x, na.rm=TRUE), colMeans2(x, na.rm=TRUE))
+  rows <- switch(INDEX, which(means >= min & means <= max), seq_len(nrow(x)))
+  cols <- switch(INDEX, seq_len(ncol(x)), which(means >= min & means <= max))
   x[rows, cols]
 
 }
