@@ -69,10 +69,13 @@ imputeByClass <- function(x, col, maxK=10, noise=0, ..., BPPARAM=NULL) {
     rj <- which(missed2 < maxNA)
     j <- length(rj)
     k <- min(maxK, max(1, (j - 1)))
-    message("Imputing group '", attr(x, "grouping"), "'...")
+    B <- getBeta(x[ri, rj])
+    toReplace <- which(is.na(B))
     eps <- matrix(rnorm(n=(i*j), sd=abs(noise)), nrow=i, ncol=j)
-    assay(x[ri, rj], "Beta") <- 
-      fexpit(impute.knn(flogit(getBeta(x[ri, rj])) + eps)$data)
+    imputed <- fexpit(impute.knn(flogit(B) + eps)$data)
+    B[toReplace] <- imputed[toReplace]
+    assay(x[ri, rj], "Beta") <- B # removes any added noise
+    message("Imputed group '", attr(x, "grouping"), "' with noise=", noise, ".")
   } else {
     message("No missing values to impute in group '", attr(x, "grouping"), "'.")
   }
