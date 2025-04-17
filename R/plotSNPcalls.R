@@ -98,11 +98,11 @@ plotSNPcalls <- function(x, rotate=FALSE, qc=FALSE, BPPARAM=NULL, pal = c("prp",
   pal <- match.arg(pal)
   col <- switch(pal, 
                 jet=colorRamp2(seq(0, 2), c("#00007F", "#FFFF00", "#7F0000")),
-                prp=colorRamp2(seq(0, 2), c("#FFCCFF", "#993399", "#331133")))
+                prp=colorRamp2(seq(0, 2), c("#FFDDFF", "#992299", "#441144")))
 
   Heatmap(calls,
           col=col, 
-          name="Alleles",
+          name="SNP alleles",
           clustering_method_rows='ward.D2', 
           clustering_method_columns='ward.D2', 
           clustering_distance_rows='manhattan',
