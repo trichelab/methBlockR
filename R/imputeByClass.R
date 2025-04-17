@@ -65,10 +65,12 @@ imputeByClass <- function(x, col, maxK=10, noise=0, ..., BPPARAM=NULL) {
   missed2 <- missingness(x[which(missed1 < maxNA), ], 2)
   if (max(missed1) > 0) {
     ri <- which(missed1 < maxNA)
+    i <- length(ri)
     rj <- which(missed2 < maxNA)
-    k <- min(maxK, max(1, length(rj) - 1))
+    j <- length(rj)
+    k <- min(maxK, max(1, (j - 1)))
     message("Imputing group '", attr(x, "grouping"), "'...")
-    eps <- matrix(rnorm(n=ri*rj, sd=abs(noise)), nrow=ri, ncol=rj)
+    eps <- matrix(rnorm(n=(i*j), sd=abs(noise)), nrow=i, ncol=j)
     assay(x[ri, rj], "Beta") <- 
       fexpit(impute.knn(flogit(getBeta(x[ri, rj])) + eps)$data)
   } else {
