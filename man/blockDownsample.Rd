@@ -4,16 +4,18 @@
 \alias{blockDownsample}
 \title{block-randomized sampling to ensure somewhat representative comparisons}
 \usage{
-blockDownsample(x, col, maxN = Inf, SNPcall = FALSE)
+blockDownsample(x, col, maxN = Inf, SNPcall = FALSE, INDEX = 2)
 }
 \arguments{
 \item{x}{a MethylationExperiment or comparable rectangular object}
 
-\item{col}{a factor for each column, or its name in colData}
+\item{col}{a factor for each row/column, or its name in colData}
 
 \item{maxN}{maximum size per-subset? (Inf; use the smallest subset size)}
 
 \item{SNPcall}{recall SNPs if present? (FALSE)}
+
+\item{INDEX}{block-downsample on columns (2) or rows (1)? (2)}
 }
 \value{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{   a subset of x, downsampled to match the smallest N(col)
