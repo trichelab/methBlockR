@@ -4,7 +4,7 @@
 \alias{filterByMean}
 \title{filterByMean}
 \usage{
-filterByMean(x, min = 0.025, max = 0.975, INDEX = c(1, 2))
+filterByMean(x, min = 0.025, max = 0.975, INDEX = 1L)
 }
 \arguments{
 \item{x}{a matrix to filter}

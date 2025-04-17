@@ -4,12 +4,15 @@
 #' @param g       a genome (hg19 is the default, or use coords from granges(x)) 
 #' @param BPPARAM a BiocParallelParam object (default SerialParam(progr=TRUE)) 
 #' 
-#' @return        x, but with a new assay Imputed that has been imputed.
+#' @return        x, with an additional assay RawBeta if none currently exists
 #' 
 #' @details       this function has not yet been tested enough for prime time.
+#'                once it has, it may be useful to combine with imputeByClass,
+#'                and one may want to investigate settings for 'noise' therein.
 #'
 #' @export
-impute.GimmeCpG <- function(x, g=NULL, BPPARAM=SerialParam(progressbar=TRUE)) {
+#'
+imputeGimmeCpG <- function(x, g=NULL, BPPARAM=SerialParam(progressbar=TRUE)) {
 
   if (!is(x, "SummarizedExperiment") | !("Beta" %in% assayNames(x))) { 
     stop("Could not find beta values to impute")
@@ -29,4 +32,4 @@ impute.GimmeCpG <- function(x, g=NULL, BPPARAM=SerialParam(progressbar=TRUE)) {
 
 
 # helper fn; use precomputed whenever possible; this should be done in C++
-.dw <- function(b1, d1, b2, d2) ((b1*abs(d1))+(b2*abs(d2)))/(abs(d1)+abs(d2))
+.gimme <- function(b1, d1, b2, d2) ((b1*abs(d1))+(b2*abs(d2)))/(abs(d1)+abs(d2))
