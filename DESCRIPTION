@@ -1,6 +1,6 @@
 Package: methBlockR
 Title: cook methylation data down to regulatory blocks for distribution & reuse
-Version: 0.9.31
+Version: 0.9.32
 Authors@R: person("Tim","Triche", 
                   email = "trichelab@gmail.com", 
                   role = c("aut","cre"),
@@ -33,6 +33,7 @@ Imports:     SummarizedExperiment,
              RSpectra,
              methods,
              RcppML,
+             Matrix,
              impute,
              uwot,
              mixR

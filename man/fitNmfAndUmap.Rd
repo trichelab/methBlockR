@@ -7,7 +7,7 @@
 fitNmfAndUmap(SCE, k = 30, ...)
 }
 \arguments{
-\item{k}{number of factors to find (30)}
+\item{k}{number of factors to find (30) (FIXME: use ARD instead)}
 
 \item{...}{other arguments to pass to RcppML::nmf}
 
