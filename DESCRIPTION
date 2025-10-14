@@ -19,7 +19,8 @@ Description: Methylation blocks are a convenient abstraction for 'loci where
              complement the 'distillation' of data and to evaluate its fidelity.
              Flat and hierarchical classifiers on raw or reduced dimensions are 
              supported; utilities for igv and wgbstools I/O are also included.
-Depends:     SingleCellExperiment,
+Depends:     R (>= 4.0), 
+             SingleCellExperiment,
              ComplexHeatmap,
              sesame,
              iSEE
@@ -46,6 +47,8 @@ Suggests:    CytoSimplex,
              CNVRanger,
              CNVfilteR,
              conumee2,
+             amethyst,
+             ebmf,
              limma
 License: MIT
 Encoding: UTF-8

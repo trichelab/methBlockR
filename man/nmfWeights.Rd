@@ -4,16 +4,16 @@
 \alias{nmfWeights}
 \title{get and plot weights for one or more factors (combine with enrichment)}
 \usage{
-nmfWeights(SCE, j = 1, what = c("logdensitymix", "logdensity", "mix"))
+nmfWeights(SCE, j = 1, k = 30, what = c("logdensitymix", "logdensity", "mix"))
 }
 \arguments{
 \item{j}{which factor (1)}
 
+\item{k}{how many top weights to plot (30)}
+
 \item{what}{what to plot (if anything) ("logdensitymix")}
 
 \item{x}{RcppML::nmf object or SingleCellExperiment-like holder of one}
-
-\item{k}{how many top weights to plot (30)}
 }
 \value{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{ a patchworked ggplot object and/or the data for the plot

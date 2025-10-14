@@ -14,7 +14,7 @@
 #'
 #' @export
 #'
-nmfWeights <- function(SCE, j=1, what=c("logdensitymix", "logdensity", "mix")) {
+nmfWeights <- function(SCE, j=1, k=30, what=c("logdensitymix", "logdensity", "mix")) {
 
   if (!is(SCE, "nmf")) { 
     # could look for a LinearEmbeddingMatrix, or 
@@ -57,6 +57,7 @@ nmfWeights <- function(SCE, j=1, what=c("logdensitymix", "logdensity", "mix")) {
 
 # helper fn
 .logdensmix <- function(xx) {
+  message("Fitting mixture model...")
   x <- log(.gt0(xx) + .Machine$double.eps)
   x <- x - min(x)
   x <- x / max(x)
@@ -71,6 +72,7 @@ nmfWeights <- function(SCE, j=1, what=c("logdensitymix", "logdensity", "mix")) {
                     weight=fit$data,
                     highlight=(apply(fit$comp.prob, 1, which.max) == ncomp))
   attr(res, "fit") <- fit
+  attr(res, "ncomp") <- ncomp 
   return(res)
 }
 
