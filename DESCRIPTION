@@ -1,24 +1,24 @@
 Package: methBlockR
 Title: cook methylation data down to regulatory blocks for distribution & reuse
-Version: 0.9.33
+Version: 0.9.34
 Authors@R: person("Tim","Triche", 
                   email = "trichelab@gmail.com", 
                   role = c("aut","cre"),
                   comment = c(ORCID = "0000-0001-5665-946X"))
 Description: Methylation blocks are a convenient abstraction for 'loci where 
-             DNA methylation changes concordantly between conditions or states'.
-             Highlighted by Loyfer (Nature, 2023), these provide a mechanism to 
-             reconcile data between deep (array) and wide (sequencing) assays. 
-             This in turn offers a way to leverage plentiful array-based samples
-             without neglecting key advantages of the sequencing-based assays,
-             such as readouts of correlated methylation blocks within fragments.
-             It is often the case that low-coverage sequencing data are better 
-             matched by block-wise methylation rates than by locus-level ratios.
-             Lightweight workflows and classes for preprocessing/QC of Illumina
-             methylation data, mostly via sesame and conumee2, are provided to 
-             complement the 'distillation' of data and to evaluate its fidelity.
-             Flat and hierarchical classifiers on raw or reduced dimensions are 
-             supported; utilities for igv and wgbstools I/O are also included.
+             DNA methylation changes concordantly by condition or state'.
+             Highlighted by Loyfer (Nature, 2023), this adds a mechanism to 
+             reconcile data between deep (array) & wide (sequencing) assays. 
+             This also offers a way to leverage plentiful array-based samples
+             without losing key advantages of the sequencing-based assays,
+             such as readouts of correlated methylation within fragments.
+             It is often true that low-coverage sequencing data are better 
+             matched by block-wise methylation rates than locus-level ratios.
+             Lightweight workflows & classes for preprocessing/QC of Illumina
+             methylation data, mostly by sesame and conumee2, are provided to
+             complement the 'distillation' of data and evaluate its fidelity.
+             Flat & hierarchical classifiers on raw or reduced dimensions are
+             supported; utilities for igv & wgbstools I/O are also included.
 Depends:     R (>= 4.0), 
              SingleCellExperiment,
              ComplexHeatmap,
