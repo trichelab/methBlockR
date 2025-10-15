@@ -27,7 +27,7 @@ markMergeable <- function(x, how=c("r","nmf"), thr=.9) {
   mcols(x)$block <- inverse.rle(blocks)
 
   byBlock <- split(x, mcols(x)$block)
-  warn("Don't forget to skip byBlock[[1]], which is actually byBlock$0!")
+  message("Don't forget to skip byBlock[[1]], which is actually byBlock$0!")
 
   # key: compute banded correlations between N adjacent blocks, 
   #      then do a greedy merge along Rles of cor > thr 
