@@ -17,7 +17,6 @@
 markMergeable <- function(x, how=c("r","nmf"), thr=.9) {
 
   how <- match.arg(how) 
-  ret <- match.arg(ret)
   
   dst <- max(width(x))   # in bp
   mcols(x)$nearest <- mcols(distanceToNearest(x))$distance
