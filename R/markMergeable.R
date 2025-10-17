@@ -1,7 +1,7 @@
 #' find mergeable methylation blocks by correlation (raw or by NMF weights)
 #' 
-#' @param x     a MethBlockExperiment, perhaps with "nmf_fit" in metadata
-#' @param how   correlation ('r') or NMF weight correlation ('nmf')
+#' @param x     a MethBlockExperiment or similar, perhaps "nmf_fit" in metadata
+#' @param how   correlation ('corr') or NMF weight correlation ('nmf')
 #' @param thr   threshold for merging neighboring blocks (0.9; see Details)
 #'
 #' @return      a list, GRanges, or MBE of merged blocks based on (how, thr)
@@ -14,17 +14,17 @@
 #'
 #' @export
 #'
-markMergeable <- function(x, how=c("r","nmf"), thr=.9) {
+markMergeable <- function(x, how=c("corr","nmf"), thr=.9) {
 
+  x <- sort(x) 
   how <- match.arg(how) 
-  
+
   dst <- max(width(x))   # in bp
   mcols(x)$nearest <- mcols(distanceToNearest(x))$distance
   mcols(x)$eligible <- as.integer(rowRanges(x)$nearest <= dst)
-  blocks <- rle(mcols(x)$eligible)
-  nonzero <- which(blocks$values > 0)
-  blocks$values[nonzero] <- seq_len(length(nonzero))
-  mcols(x)$block <- inverse.rle(blocks)
+ 
+  # need to split by chrom first
+  byChr <- lapply(.splitByChrom(x), .nameBlocks)
 
   byBlock <- split(x, mcols(x)$block)
   message("Don't forget to skip byBlock[[1]], which is actually byBlock$0!")
@@ -36,8 +36,10 @@ markMergeable <- function(x, how=c("r","nmf"), thr=.9) {
     stopifnot("nmf_fit" %in% names(metadata(x)))
     nmf <- metadata(x)$nmf_fit
   } else { 
-
+    
   } 
+
+  
 
   stop("Not finished") 
 
@@ -46,3 +48,23 @@ markMergeable <- function(x, how=c("r","nmf"), thr=.9) {
 
 # helper fn
 .splitByMcol <- function(x, mcol) split(x, mcols(x)[[mcol]])
+
+
+# helper fn 
+.splitByChrom <- function(x) split(x, seqnames(x))
+
+
+# helper fn; assumes by chr
+.nameBlocks <- function(x) { 
+
+  chr <- unique(seqnames(x))
+  stopifnot(length(chr) == 1)
+
+  blocks <- rle(mcols(x)$eligible)
+  nonzero <- which(blocks$values > 0)
+  blocks$values[nonzero] <- paste0(chr, "_block", seq_len(length(nonzero)))
+  mcols(x)$block <- inverse.rle(blocks)
+
+  return(x) 
+
+}

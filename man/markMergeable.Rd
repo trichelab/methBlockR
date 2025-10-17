@@ -4,12 +4,12 @@
 \alias{markMergeable}
 \title{find mergeable methylation blocks by correlation (raw or by NMF weights)}
 \usage{
-markMergeable(x, how = c("r", "nmf"), thr = 0.9)
+markMergeable(x, how = c("corr", "nmf"), thr = 0.9)
 }
 \arguments{
-\item{x}{a MethBlockExperiment, perhaps with "nmf_fit" in metadata}
+\item{x}{a MethBlockExperiment or similar, perhaps "nmf_fit" in metadata}
 
-\item{how}{correlation ('r') or NMF weight correlation ('nmf')}
+\item{how}{correlation ('corr') or NMF weight correlation ('nmf')}
 
 \item{thr}{threshold for merging neighboring blocks (0.9; see Details)}
 }

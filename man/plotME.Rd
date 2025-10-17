@@ -42,7 +42,7 @@ plotME(
 plot a MethylationExperiment or MethBlockExperiment features + SNPs
 }
 \details{
-If SNPs cannot be found, only the main methylation plot is returned.
+If SNPs are not found, only the main methylation plot is created.
 For reasons not yet clear, it's usually best to leave BPPARAM alone.
 For reasons quite clear, caching SNP calls is a very good idea, via
 metadata(x)$SNPcalls <- SNPcalls(x), and will speed up things A LOT

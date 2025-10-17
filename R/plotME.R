@@ -13,7 +13,7 @@
 #' @param ...       parameters to pass to Heatmap
 #' @param BPPARAM   BiocParallelParam() to pass to plotSNPcalls (SerialParam())
 #'
-#' @details If SNPs cannot be found, only the main methylation plot is returned.
+#' @details If SNPs are not found, only the main methylation plot is created.
 #'          For reasons not yet clear, it's usually best to leave BPPARAM alone.
 #'          For reasons quite clear, caching SNP calls is a very good idea, via
 #'          metadata(x)$SNPcalls <- SNPcalls(x), and will speed up things A LOT
@@ -47,15 +47,18 @@ plotME <- function(x, k=100, minmean=0.2, maxmean=0.8, maxNA=0.2, splitBy=NULL, 
     }
     if ("SNPs" %in% names(metadata(x))) { 
       if (is.null(BPPARAM)) BPPARAM <- SerialParam(progressbar = TRUE)
-      message("Calling and plotting SNPs...")
+      message("plotting SNPs...")
       H2 <- suppressMessages(try(plotSNPcalls(x, 
                                               qc=TRUE,
                                               pal=pal,
-                                              BPPARAM=BPPARAM, 
+                                              BPPARAM=BPPARAM,
                                               show_row_dend=FALSE),
                                  silent=TRUE))
       if (!inherits(H2, "try-error")) { 
         qcResult <- attr(H2@matrix, "qcResult")
+        # bugfix for a rather bizarre situation
+        H1 <- .plotMethSplit(toPlot[, rownames(H2@matrix)],
+                             cluster_rows = FALSE) 
         lst <- H1 + H2 
         draw(lst, row_split = qcResult)
       } else { 
