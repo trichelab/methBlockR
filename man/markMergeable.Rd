@@ -4,23 +4,36 @@
 \alias{markMergeable}
 \title{find mergeable methylation blocks by correlation (raw or by NMF weights)}
 \usage{
-markMergeable(x, how = c("corr", "nmf"), thr = 0.9)
+markMergeable(x, how = c("corr", "nmf"), dst = 1000, p = 0.01, minr = 0.5)
 }
 \arguments{
 \item{x}{a MethBlockExperiment or similar, perhaps "nmf_fit" in metadata}
 
 \item{how}{correlation ('corr') or NMF weight correlation ('nmf')}
 
-\item{thr}{threshold for merging neighboring blocks (0.9; see Details)}
+\item{dst}{how many base pairs (max) to look in each direction? (1000)}
+
+\item{p}{threshold p(cor) for merging neighboring blocks (0.01; Details)}
+
+\item{minr}{minimum acceptable correlation (regardless of p) to merge (0.5)}
 }
 \value{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{ a list, GRanges, or MBE of merged blocks based on (how, thr)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ an Rle of mergeable block candidates based on (how, dst, thr)
 }\if{html}{\out{</div>}}
 }
 \description{
 find mergeable methylation blocks by correlation (raw or by NMF weights)
 }
 \details{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{blocks more than max(width(blocks)) bp apart are not checked
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Given n pairs of observations, a statistical test of correlation
+         can be performed against a t distribution with n-2 df, where 
+         the test statistic is t* = (r * sqrt(n-2)) / sqrt(1 - (r**2)),
+         and the one-side p-value is pt(t*, df=n-2, lower.tail=FALSE). 
+         Since we don't care about strong negative correlation, we only
+         test for positive correlations unlikely to be due to chance,
+         so we find t* = qt(1 - (p/dstblocks(x)), df=ncol(x) - 2),
+         where dstblocks(x) is the number of blocks in metablocks,
+         then solve for the minimum correlation r generating t* with n-2,
+         and that r is our lower bound to merge blocks within metablocks.
 }\if{html}{\out{</div>}}
 }
