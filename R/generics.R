@@ -199,7 +199,7 @@ setMethod("cbind", "MethylationExperiment",
 
 
 #' @export
-#' @importMethodsFrom GenomeInfoDb "genome<-"
+#' @importMethodsFrom Seqinfo "genome<-"
 #'
 setReplaceMethod("genome", "MethBlockExperiment", 
   function(x, value) stop("Use switchMethBlocksGenome() to switch genomes!")

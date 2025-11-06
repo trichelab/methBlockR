@@ -1,6 +1,6 @@
 Package: methBlockR
 Title: cook methylation data down to regulatory blocks for distribution & reuse
-Version: 0.9.36
+Version: 0.9.37
 Authors@R: person("Tim","Triche", 
                   email = "trichelab@gmail.com", 
                   role = c("aut","cre"),
@@ -19,7 +19,7 @@ Description: Methylation blocks are a convenient abstraction for 'loci where
              complement the 'distillation' of data and evaluate its fidelity.
              Flat & hierarchical classifiers on raw or reduced dimensions are
              supported; utilities for igv & wgbstools I/O are also included.
-Depends:     R (>= 4.0), 
+Depends:     R (>= 4.5), 
              SingleCellExperiment,
              ComplexHeatmap,
              sesame,
@@ -36,6 +36,7 @@ Imports:     SummarizedExperiment,
              RSpectra,
              ggplot2,
              methods,
+             Seqinfo,
              RcppML,
              Matrix,
              impute,
@@ -48,8 +49,6 @@ Suggests:    CytoSimplex,
              CNVRanger,
              CNVfilteR,
              conumee2,
-             amethyst,
-             ebmf,
              limma
 License: MIT
 Encoding: UTF-8
