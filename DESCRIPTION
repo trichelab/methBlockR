@@ -1,6 +1,6 @@
 Package: methBlockR
 Title: cook methylation data down to regulatory blocks for distribution & reuse
-Version: 0.9.37
+Version: 0.9.38
 Authors@R: person("Tim","Triche", 
                   email = "trichelab@gmail.com", 
                   role = c("aut","cre"),
@@ -19,12 +19,12 @@ Description: Methylation blocks are a convenient abstraction for 'loci where
              complement the 'distillation' of data and evaluate its fidelity.
              Flat & hierarchical classifiers on raw or reduced dimensions are
              supported; utilities for igv & wgbstools I/O are also included.
-Depends:     R (>= 4.5), 
+Depends: R (>= 4.5), 
              SingleCellExperiment,
              ComplexHeatmap,
              sesame,
              iSEE
-Imports:     SummarizedExperiment,
+Imports: SummarizedExperiment,
              ReducedExperiment,
              GenomicRanges,
              BiocParallel,
@@ -42,7 +42,7 @@ Imports:     SummarizedExperiment,
              impute,
              uwot,
              mixR
-Suggests:    CytoSimplex,
+Suggests: CytoSimplex,
              CytoMethIC,
              fastTopics,
              naivebayes,
@@ -53,6 +53,6 @@ Suggests:    CytoSimplex,
 License: MIT
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 URL: https://github.com/trichelab/methBlockR
 BugReports: https://github.com/trichelab/methBlockR/issues

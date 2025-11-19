@@ -7,9 +7,9 @@
 asGCT(x, assay = 1, group = NULL, stub = NULL, genome = "hg19")
 }
 \arguments{
-\item{x}{a SummarizedExperiment-like object of some sort}
+\item{x}{a SummarizedExperiment-like object}
 
-\item{assay}{the name of the assay to dump (default: assays(x)[\link{1}])}
+\item{assay}{the name of the assay to dump (default: the first assay)}
 
 \item{group}{a grouping factor to dump by (default: dump everyone)}
 

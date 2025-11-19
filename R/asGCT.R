@@ -1,7 +1,7 @@
 #' Dump DNA methylation values for quick and dirty IGV viewing
 #'
-#' @param x         a SummarizedExperiment-like object of some sort
-#' @param assay     the name of the assay to dump (default: assays(x)[[1]])
+#' @param x         a SummarizedExperiment-like object
+#' @param assay     the name of the assay to dump (default: the first assay)
 #' @param group     a grouping factor to dump by (default: dump everyone) 
 #' @param stub      the filename stub to dump (default: name of x, or x_group)
 #' @param genome    the genome to use (default is hg19, due to annotations)
