@@ -22,13 +22,13 @@ refitUmap <- function(SCE, k_sub, name) {
     SCE <- as(SCE, "SingleCellExperiment") # if a SummarizedExperiment
   }
 
-  stopifnot(all(k_sub %in% seq_len(nrow(reducedDim(SCE, "NMF")))))
-  if (identical(sort(k_sub), seq_len(nrow(reducedDim(SCE, "NMF"))))) { 
-    warning("You selected all of the columns in the existing NMF data!")
+  stopifnot(all(k_sub %in% seq_len(ncol(reducedDim(SCE, "NMF")))))
+  if (identical(sort(k_sub), seq_len(ncol(reducedDim(SCE, "NMF"))))) { 
+    warning("You selected all of the existing NMF dimensions!")
   }
 
   message("Fitting UMAP on subsetted NMF hat matrix... ", appendLF = FALSE)
-  umap_fit <- umap(reducedDim(SCE, "NMF")[k_sub, ], 
+  umap_fit <- umap(reducedDim(SCE, "NMF")[, k_sub], 
                    n_neighbors=min(round(ncol(SCE)/2), 15),
                    metric="cosine", ret_model=TRUE)
   reducedDim(SCE, name) <- umap_fit$embedding
