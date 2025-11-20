@@ -4,10 +4,12 @@
 \alias{fitNmfAndUmap}
 \title{performs NMF on the beta values, stuffs the factors into colData, runs UMAP}
 \usage{
-fitNmfAndUmap(SCE, k = 30, ...)
+fitNmfAndUmap(SCE, k = 30, wts = TRUE, ...)
 }
 \arguments{
 \item{k}{number of factors to find (30) (FIXME: use ARD instead)}
+
+\item{wts}{add the weights to rowData(x)? (TRUE)}
 
 \item{...}{other arguments to pass to RcppML::nmf}
 

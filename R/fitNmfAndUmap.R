@@ -2,6 +2,7 @@
 #' 
 #' @param x   a MethBlockExperiment or similar thing-with-Beta-values
 #' @param k   number of factors to find (30) (FIXME: use ARD instead)
+#' @param wts add the weights to rowData(x)? (TRUE) 
 #' @param ... other arguments to pass to RcppML::nmf
 #'
 #' @return    SCE, with new reducedDim()s, colData, nmf_fit & umap_fit metadata
@@ -16,7 +17,7 @@
 #'
 #' @export
 #'
-fitNmfAndUmap <- function(SCE, k=30, ...) {
+fitNmfAndUmap <- function(SCE, k=30, wts=TRUE, ...) {
 
   if (!is(SCE, "SingleCellExperiment")) { 
     SCE <- as(SCE, "SingleCellExperiment") # if a SummarizedExperiment
@@ -33,6 +34,11 @@ fitNmfAndUmap <- function(SCE, k=30, ...) {
           appendLF = FALSE)
   colData(SCE)[, cols] <- reducedDim(SCE, "NMF")
   message("done.")
+  if (wts) {
+    message("Adding NMF weights to rowData()...", appendLF = FALSE)
+    rowData(SCE)[, "NMF"] <- nmf_fit@w
+    message("done.")
+  }
   metadata(SCE)$nmf_fit <- nmf_fit
   message("Fitting UMAP on NMF hat matrix... ", appendLF = FALSE)
   umap_fit <- umap(reducedDim(SCE, "NMF"), 
