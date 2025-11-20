@@ -23,4 +23,18 @@ extract the positional weights for an NMF factor
 like duh, if there's no mcols(x)[\link{"NMF"}], this won't work.
 You will want to use rtracklayer or igvR to view the result;
 seqinfo(gr) <- SeqinfoForUCSCGenome(g)\link{seqlevels(gr)} may help
+(see example for a demonstration of how this approach can work)
+}
+\examples{
+\dontrun{
+  nmf5 <- factorWeight(MBE, 5)
+  nmf7 <- factorWeight(MBE, 7) 
+  library(rtracklayer) 
+  for (i in c("nmf5","nmf7")) {
+    j <- get(i)
+    seqinfo(j) <- SeqinfoForUCSCGenome(unique(genome(j)))[seqlevels(j)]
+    export(j, paste(i, unique(genome(j)), "bw", sep="."))
+  }
+}
+
 }
