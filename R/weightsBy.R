@@ -7,8 +7,11 @@
 #' 
 #' @return      a ggplot object
 #'
+#' @importFrom scales label_percent
+#' @importFrom forcats fct_rev
 #' @import reshape2
 #' @import ggplot2 
+#' @import scales 
 #' 
 #' @export
 #'
@@ -26,8 +29,10 @@ weightsBy <- function(SCE, by, name="NMF", add=NULL) {
   }
   toPlot <- melt(wts, id.vars=id, variable.name="factor", value.name="weight")
   ggplot(toPlot) + 
-    aes(x=weight, y=factor, fill=by) + 
+    aes(x=weight, y=fct_rev(factor), fill=by) + 
+    scale_x_continuous(labels=label_percent()) +
     geom_bar(position="fill", stat="identity") + 
+    labs(fill=by, y=NULL) + 
     theme_classic() 
 
 }
