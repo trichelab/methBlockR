@@ -20,9 +20,8 @@ a GRanges where the $score column is that factor's weights
 extract the positional weights for an NMF factor
 }
 \details{
-like duh, if there's no mcols(x)[\link{"NMF"}], this won't work.
-You will want to use rtracklayer or igvR to view the result;
-seqinfo(gr) <- SeqinfoForUCSCGenome(g)\link{seqlevels(gr)} may help
+If mcols(x) does not contain a matrix called NMF, this will fail.
+Also, you'll want to use rtracklayer or igvR to view the result.
 (see example for a demonstration of how this approach can work)
 }
 \examples{
