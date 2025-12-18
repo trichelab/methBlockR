@@ -24,6 +24,20 @@
 #' @export
 asMethBlocks <- function(x, g=c("hg19","hg38","mm10","custom"), custom=NULL) {
 
+  if (is(x, "GenomicRatioSet") & any(width(rowRanges(x))>50)) { 
+    message("Converting a blocked GenomicRatioSet to a MethBlockExperiment...")
+    # just convert to MBE 
+    g <- unique(genome(x))
+    if (!g %in% names(mcols(x))) {
+      data("methBlocks", package="methBlockR")
+      genomes <- c("hg19", "hg38") 
+      gg <- setdiff(genomes, g) 
+      mcols(x)[, g] <- methBlocks[match(rownames(fsb), methBlocks[[g]]), g]
+      mcols(x)[, gg] <- methBlocks[match(rownames(fsb), methBlocks[[g]]), gg]
+    }
+    return(as(as(x, "SingleCellExperiment"), "MethBlockExperiment"))
+  }
+
   g <- match.arg(g)
   if (is(x, "MethylationExperiment")) { 
     # coerce the object so that we can pass it through the constructor
